@@ -1,4 +1,3 @@
-package CSI4107;
 public class documentTfTuple {
     
 

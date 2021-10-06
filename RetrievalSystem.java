@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import Tweet; 
 public class RetrievalSystem {
 
     public static void main(String args[]) throws IOException {
@@ -18,13 +17,10 @@ public class RetrievalSystem {
             
             String line; 
             while ((line = bufferReader.readLine()) != null) {
-                System.out.print(line.substring(0,17));
 
-                Tweet tweet = new Tweet(line.substring(0,17), line.substring(18)); 
+                Tweet tweet = new Tweet(line.substring(0,17), line.substring(18));
+                System.out.println(tweet.getTweetID()); 
                 System.out.print("\n");
-                System.out.print(line.substring(18));
-                System.out.print("\n");
-                // System.out.print(line.substring(18));
                 
             }
 
