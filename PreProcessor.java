@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class PreProcessor {
@@ -34,6 +35,13 @@ public class PreProcessor {
             // for (String word: words) {
             //     System.out.println(word);
             // }
+
+            PrintWriter writer = new PrintWriter("Processed.txt", "UTF-8");
+            for (String word: words) {
+                writer.println(word);
+            }
+            
+            writer.close();
 
             // close scanner 
             scanner.close();

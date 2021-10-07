@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import org.graalvm.compiler.word.WordOperationPlugin;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,6 +29,9 @@ public class RetrievalSystem {
 
                 String[] message = line.substring(18).split("\\s+");
                 List<String> tweetMessage = Arrays.asList(message);
+                for (String word: tweetMessage) {
+                    word = word.replaceAll("[^a-zA-Z]","");
+                }
                 Tweet tweet = new Tweet(line.substring(0,17), tweetMessage);
 
                 collection.add(tweet);
@@ -51,7 +53,7 @@ public class RetrievalSystem {
 
         InvertedIndex invertedIndex = new InvertedIndex();
 
-        File f = new File("preprocessed.txt");
+        File f = new File("Processed.txt");
             
         FileReader fr = new FileReader(f);
         BufferedReader bufferReader = new BufferedReader(fr); 
