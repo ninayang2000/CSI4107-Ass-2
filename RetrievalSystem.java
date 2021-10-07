@@ -53,7 +53,8 @@ public class RetrievalSystem {
 
         InvertedIndex invertedIndex = new InvertedIndex();
 
-        File f = new File("Processed.txt");
+        // File f = new File("Processed.txt");
+        File f = new File("preprocessed.txt");
             
         FileReader fr = new FileReader(f);
         BufferedReader bufferReader = new BufferedReader(fr); 

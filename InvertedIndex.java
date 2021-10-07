@@ -45,7 +45,11 @@ public class InvertedIndex {
         for (String index: invertedIndex.keySet()) {
             System.out.print(index + ": ");
             for (documentTfTuple tup: invertedIndex.get(index)) {
-                tup.printTuple();
+                if (!(tup.getTermFrequency() == 0)) {
+                    tup.printTuple();
+
+                }
+                
             }
             
             System.out.println();
