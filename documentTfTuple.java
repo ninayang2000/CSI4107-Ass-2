@@ -27,6 +27,10 @@ public class documentTfTuple {
         this.termFrequency = termFrequency;
     }
 
+    public void printTuple() {
+        System.out.print("(" + this.getTweetID() + ", "  + this.getTermFrequency() + ") ");
+    }
+
 
 
 }
