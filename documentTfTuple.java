@@ -1,13 +1,14 @@
+import org.graalvm.compiler.graph.spi.Canonicalizable.Ternary;
+
 public class documentTfTuple {
     
 
     private String tweetID; 
     private int termFrequency; 
 
-    public documentTfTuple(String tweetID) {
-        this.tweetID = documentId; 
-        this.termFrequency = 1; 
-
+    public documentTfTuple(String tweetID, int termFrequency ) {
+        this.tweetID = tweetID; 
+        this.termFrequency = termFrequency; 
     }
 
     public String getTweetID() {

@@ -1,12 +1,21 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tweet {
 
 
     private String tweetID; 
-    private String tweet; 
+    private List<String> tweet = new ArrayList<String>(); 
 
-    public Tweet(String tweetID, String tweet) {
+    public List<String> getTweet() {
+        return tweet;
+    }
+
+    public void setTweet(List<String> tweet) {
+        this.tweet = tweet;
+    }
+
+    public Tweet(String tweetID, List<String> tweet) {
         this.tweetID = tweetID; 
         this.tweet = tweet; 
 
@@ -20,11 +29,4 @@ public class Tweet {
         this.tweetID = tweetID;
     }
 
-    public String getTweet() {
-        return tweet;
-    }
-
-    public void setTweet(String tweet) {
-        this.tweet = tweet;
-    }
 }

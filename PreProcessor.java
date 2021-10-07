@@ -7,14 +7,12 @@ public class PreProcessor {
 
     public static void main(String args[]) throws IOException {
 
-        List<String> words = new ArrayList<>();
+        Set<String> words = new HashSet<String>();
         ArrayList<String> stopWords = getStopWords();
 
         try {
             
             File input = new File("Trec_microblog11.txt");
-            // File input = new File("Trec_microblog11.txt");
-
             System.out.println("Opened successfully");
             Scanner scanner = new Scanner(input);
         
