@@ -4,8 +4,8 @@ import java.util.List;
 public class Tweet {
 
 
-    private String tweetID; 
-    private List<String> tweet = new ArrayList<String>(); 
+    private String tweetID;
+    private List<String> tweet = new ArrayList<String>();
 
     public List<String> getTweet() {
         return tweet;
@@ -16,11 +16,11 @@ public class Tweet {
     }
 
     public Tweet(String tweetID, List<String> tweet) {
-        this.tweetID = tweetID; 
-        this.tweet = tweet; 
+        this.tweetID = tweetID;
+        this.tweet = tweet;
 
     }
-    
+
     public String getTweetID() {
         return tweetID;
     }

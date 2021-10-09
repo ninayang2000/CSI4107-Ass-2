@@ -13,17 +13,17 @@ public class RetrievalSystem {
 
     public static void main(String args[]) throws IOException {
 
-        List<Tweet> collection = new ArrayList<Tweet>(); 
+        List<Tweet> collection = new ArrayList<Tweet>();
 
 
         try {
             File input = new File("Trec_microblog11 copy.txt");
-            
-            FileReader fr = new FileReader(input);
-            BufferedReader bufferReader = new BufferedReader(fr); 
 
-            
-            String line; 
+            FileReader fr = new FileReader(input);
+            BufferedReader bufferReader = new BufferedReader(fr);
+
+
+            String line;
             while ((line = bufferReader.readLine()) != null) {
 
 
@@ -35,11 +35,11 @@ public class RetrievalSystem {
                 Tweet tweet = new Tweet(line.substring(0,17), tweetMessage);
 
                 collection.add(tweet);
-                
+
             }
 
 
-            bufferReader.close(); 
+            bufferReader.close();
 
 
         }catch (FileNotFoundException e) {
@@ -47,7 +47,7 @@ public class RetrievalSystem {
             e.printStackTrace();
             return;
 
-        } 
+        }
 
 
 
@@ -55,41 +55,41 @@ public class RetrievalSystem {
 
         // File f = new File("Processed.txt");
         File f = new File("preprocessed.txt");
-            
-        FileReader fr = new FileReader(f);
-        BufferedReader bufferReader = new BufferedReader(fr); 
 
-        
-        String line; 
+        FileReader fr = new FileReader(f);
+        BufferedReader bufferReader = new BufferedReader(fr);
+
+
+        String line;
         while ((line = bufferReader.readLine()) != null) {
 
             for (Tweet tweet: collection ) {
-                int wordFreq = 0; 
+                int wordFreq = 0;
                 for (String wordInTweet: tweet.getTweet()) {
                     if (wordInTweet.toLowerCase().equals(line)) {
-                        wordFreq++; 
-                        
+                        wordFreq++;
+
                     }
 
                 }
-                invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq)); 
+                invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq));
             }
-            
+
         }
 
         invertedIndex.printIndex();
-        bufferReader.close(); 
+        bufferReader.close();
 
     }
 
 
 
-    
+
 }
 
 
 
-        //     // for each word from the preprocessor 
+        //     // for each word from the preprocessor
 
         //     // loop through each tweet and note down how many times that word appears in each tweet
 
@@ -105,13 +105,13 @@ public class RetrievalSystem {
         //     // //     String word = scanner.next().toLowerCase();
         //     // //     System.out.println(word.charAt(0));
 
-                
-        //     // // }
-        
-        //     // while (scanner.hasNextLine()) {
-        //     //     String tweetID = scanner.nextLine(); 
 
-                
+        //     // // }
+
+        //     // while (scanner.hasNextLine()) {
+        //     //     String tweetID = scanner.nextLine();
+
+
         //     //     String arr[] = tweetID.split("	", 2);
         //     //     System.out.println(arr[0]);
 
