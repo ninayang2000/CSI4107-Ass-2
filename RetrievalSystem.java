@@ -17,15 +17,19 @@ public class RetrievalSystem {
 
 
         try {
-            File input = new File("Trec_microblog11 copy.txt");
-
+           File input = new File("Trec_microblog11 copy.txt");
+            // File input = new File("Trec_microblog11.txt");
             FileReader fr = new FileReader(input);
             BufferedReader bufferReader = new BufferedReader(fr);
 
 
             String line;
+            boolean isFirstLine = true;
             while ((line = bufferReader.readLine()) != null) {
-
+                if(isFirstLine){
+                  isFirstLine = false;
+                  line = line.substring(3);
+                }
 
                 String[] message = line.substring(18).split("\\s+");
                 List<String> tweetMessage = Arrays.asList(message);
@@ -53,7 +57,7 @@ public class RetrievalSystem {
 
         InvertedIndex invertedIndex = new InvertedIndex();
 
-        // File f = new File("Processed.txt");
+        //File f = new File("Processed.txt");
         File f = new File("preprocessed.txt");
 
         FileReader fr = new FileReader(f);
