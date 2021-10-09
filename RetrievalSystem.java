@@ -72,7 +72,10 @@ public class RetrievalSystem {
                     }
 
                 }
-                invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq));
+                if (!(wordFreq == 0)){
+                  invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq));
+                }
+
             }
 
         }
