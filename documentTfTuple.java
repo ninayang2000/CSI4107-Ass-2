@@ -1,20 +1,20 @@
 
 public class documentTfTuple {
-    
 
-    private String tweetID; 
-    private int termFrequency; 
 
-    public documentTfTuple(String tweetID, int termFrequency ) {
-        this.tweetID = tweetID; 
-        this.termFrequency = termFrequency; 
+    private Long tweetID;
+    private int termFrequency;
+
+    public documentTfTuple(Long tweetID, int termFrequency ) {
+        this.tweetID = tweetID;
+        this.termFrequency = termFrequency;
     }
 
-    public String getTweetID() {
+    public Long getTweetID() {
         return tweetID;
     }
 
-    public void setTweetID (String tweetID) {
+    public void setTweetID (Long tweetID) {
         this.tweetID = tweetID;
     }
 

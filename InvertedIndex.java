@@ -24,6 +24,10 @@ public class InvertedIndex {
     // }
 
 
+  public Map<String, Posting> getMap(){
+    return invertedIndex;
+  }
+
     public void addToIndex(String indexTerm, documentTfTuple tuple) {
         // if index term is not yet in hashmap
         if(!invertedIndex.containsKey(indexTerm)) {

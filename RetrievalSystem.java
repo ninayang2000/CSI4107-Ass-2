@@ -1,10 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 import java.io.BufferedReader;
@@ -36,7 +33,8 @@ public class RetrievalSystem {
                 for (String word: tweetMessage) {
                     word = word.replaceAll("[^a-zA-Z]","");
                 }
-                Tweet tweet = new Tweet(line.substring(0,17), tweetMessage);
+                Long twtID = new Long(Long.parseLong(line.substring(0,17)));
+                Tweet tweet = new Tweet(twtID, tweetMessage);
 
                 collection.add(tweet);
 
@@ -87,11 +85,43 @@ public class RetrievalSystem {
         invertedIndex.printIndex();
         bufferReader.close();
 
+        //get the user input for the query
+        Scanner userinput = new Scanner(System.in);
+        String query = userinput.nextLine(); //read the string
+
+        //from this point on, all the lines of code can be in a sepcialized class
+        String[] queryWords = query.split("\\s+");
+        Map<Long, Float> ranking = new TreeMap<Float,Long>();
+        Set<documentTfTuple> setQueryDocs = new HashSet <documentTfTuple>();
+
+        //looping on the list of words in the query
+        for (String word: queryWords) {
+            if(invertedIndex.getMap().containsKey(word)){ //check if a word in the query is found in the index
+              setQueryDocs.addAll(invertedIndex.getMap().get(word).getPostingList());//addAll works like a union operation
+              //addAll doesn't duplicate elements
+            }
+        }
+
+        for(documentTfTuple doc:setQueryDocs){
+          /*
+          tf = 1 + log(tf) tf = 1 + log(documentTfTuple.getTermFrequency())
+          idf= log(N/df)   idf = log(collection.size()/invertedIndex.getMap().get(TERM).getDocf())
+          tf-idf =  (1 + log(tf))*(log(N/df))
+
+          divide the weight of the tf of the query words with the maximum frequency in the query
+          example query: new airport in new york -> maximum frequency is 2 for new. divide the term frequency of all words in the query by 2
+          so for all other words it's going to have a tf of 1/2. a word in the query and in the doc will have both of their term freqcies multiplied
+          then divided by the idf.
+
+          after the dot product has been found
+          query example
+          save world petitions technology question rethink positive outlook technology staffing specialist
+
+          */
+        }
+
+
     }
-
-
-
-
 }
 
 

@@ -4,7 +4,7 @@ import java.util.List;
 public class Tweet {
 
 
-    private String tweetID;
+    private Long tweetID;
     private List<String> tweet = new ArrayList<String>();
 
     public List<String> getTweet() {
@@ -15,17 +15,17 @@ public class Tweet {
         this.tweet = tweet;
     }
 
-    public Tweet(String tweetID, List<String> tweet) {
+    public Tweet(Long tweetID, List<String> tweet) {
         this.tweetID = tweetID;
         this.tweet = tweet;
 
     }
 
-    public String getTweetID() {
+    public Long getTweetID() {
         return tweetID;
     }
 
-    public void setTweetID(String tweetID) {
+    public void setTweetID(Long tweetID) {
         this.tweetID = tweetID;
     }
 
