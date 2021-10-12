@@ -90,35 +90,99 @@ public class RetrievalSystem {
         String query = userinput.nextLine(); //read the string
 
         //from this point on, all the lines of code can be in a sepcialized class
+        //List<String> queryWords = Arrays.asList(query.split("\\s+"));
         String[] queryWords = query.split("\\s+");
-        Map<Long, Float> ranking = new TreeMap<Float,Long>();
-        Set<documentTfTuple> setQueryDocs = new HashSet <documentTfTuple>();
+        int N = collection.size();
+        RtrvlRank rankingOperations = new RtrvlRank();
+        double queryLength=0.0;
+
+        Map<String, Integer> queryFrequencies = rankingOperations.freq(queryWords);
+        Map.Entry<String, Integer> maxFreq = rankingOperations.maxTF(queryFrequencies);
+
+
+        NavigableMap<Double, List<Long>> ranking = new TreeMap<Double,List<Long>>();
+      /*ranking.put(new Float(0.67F),new Long(56378954123L));
+        ranking.put(new Float(0.79F),new Long(657487233244L));
+        ranking.put(new Float(0.99F),new Long(7852636378524L));
+        ranking.put(new Float(0.87F),new Long(83524352424L));
+        rankingOperations.showResults(ranking);*/
+
+        Map <Long, ScoreLength> score_length = new HashMap <Long, ScoreLength>();
+
+        Set<String> word_set = new HashSet<String>();
+        for (int i = 0; i<queryWords.length;i++){
+          word_set.add(queryWords[i]);
+        }
+
+
 
         //looping on the list of words in the query
-        for (String word: queryWords) {
+        for (String word: word_set) {
             if(invertedIndex.getMap().containsKey(word)){ //check if a word in the query is found in the index
-              setQueryDocs.addAll(invertedIndex.getMap().get(word).getPostingList());//addAll works like a union operation
-              //addAll doesn't duplicate elements
+
+              //get posting list and DF
+              Posting posting = invertedIndex.getMap().get(word);
+
+              //Document Frequence of the current term
+              int word_docFrequency = posting.getDocf();
+              //The maximum Term Frequence in the Query NOT the Collection
+              int maxQueryFreq = maxFreq.getValue();
+
+              //Computing the weight of the term with respect to the query words
+              double termWeight = rankingOperations.weight(N,queryFrequencies.get(word),word_docFrequency,true,maxQueryFreq);
+              //We will take the square root of this number later.
+              queryLength = queryLength + Math.pow(termWeight,2);
+
+              // System.out.print(word);
+              // System.out.println(": "+queryFrequencies.get(word) + " "+termWeight);
+
+
+              for(documentTfTuple doc:posting.getPostingList()){//for each document in the posting list
+
+                int word_termFrequency = doc.getTermFrequency();//term frequency of the word in the document
+                Long docID = doc.getTweetID();//get the ID
+
+                //compute the weight of the word in terms of the document
+                double docWeight = rankingOperations.weight(N,word_termFrequency,word_docFrequency,false,1);
+
+
+                if(score_length.containsKey(docID)){
+
+                    ScoreLength score_length_pair = score_length.get(docID);
+
+                    double newScore = score_length_pair.getScore() + (docWeight*termWeight);
+                    score_length.get(docID).setScore(newScore);
+
+                    double newLength = score_length_pair.getLength() + Math.pow(docWeight,2);
+                    score_length.get(docID).setLength(newLength);
+                }else{
+                  double newScore =  docWeight*termWeight;
+                  double newLength = Math.pow(docWeight,2);
+                  score_length.put(docID,new ScoreLength(newScore,newLength));
+                }
+              }
+
             }
         }
 
-        for(documentTfTuple doc:setQueryDocs){
-          /*
-          tf = 1 + log(tf) tf = 1 + log(documentTfTuple.getTermFrequency())
-          idf= log(N/df)   idf = log(collection.size()/invertedIndex.getMap().get(TERM).getDocf())
-          tf-idf =  (1 + log(tf))*(log(N/df))
+        for(Map.Entry<Long,ScoreLength> entry:score_length.entrySet()){
 
-          divide the weight of the tf of the query words with the maximum frequency in the query
-          example query: new airport in new york -> maximum frequency is 2 for new. divide the term frequency of all words in the query by 2
-          so for all other words it's going to have a tf of 1/2. a word in the query and in the doc will have both of their term freqcies multiplied
-          then divided by the idf.
+            Long docIDRanking = entry.getKey();
+            ScoreLength value_node = entry.getValue();
+            double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
+            System.out.println(final_score + ", ID: " + docIDRanking);
+            Double ranking_key = new Double(final_score);
+            if(!ranking.containsKey(ranking_key)){
+              List<Long> rank_array = new ArrayList<Long>();
+                rank_array.add(docIDRanking);
+                ranking.put(ranking_key,rank_array);
+            }else{
+                  ranking.get(ranking_key).add(docIDRanking);
+            }
 
-          after the dot product has been found
-          query example
-          save world petitions technology question rethink positive outlook technology staffing specialist
-
-          */
         }
+
+        rankingOperations.showResults(ranking);
 
 
     }
