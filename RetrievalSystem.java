@@ -1,21 +1,23 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
-
+import java.io.FileWriter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 public class RetrievalSystem {
 
     public static void main(String args[]) throws IOException {
-
+        Set<String> words = new HashSet<String>();
+        ArrayList<String> stopWords = getStopWords();
         List<Tweet> collection = new ArrayList<Tweet>();
 
-
         try {
-           File input = new File("Trec_microblog11 copy.txt");
-            // File input = new File("Trec_microblog11.txt");
+
+            File input = new File("Trec_microblog11.txt");
+
             FileReader fr = new FileReader(input);
             BufferedReader bufferReader = new BufferedReader(fr);
 
@@ -23,28 +25,43 @@ public class RetrievalSystem {
             String line;
             boolean isFirstLine = true;
             while ((line = bufferReader.readLine()) != null) {
-                if(isFirstLine){
-                  isFirstLine = false;
-                  line = line.substring(3);
+                if(isFirstLine) {
+                    isFirstLine = false;
+                    line = line.substring(1);
                 }
+  
 
-                String[] message = line.substring(18).split("\\s+");
+                // split lines by space
+                String[] message = line.substring(18).replaceAll("[^a-zA-Z]"," ").split("\\s+");
                 List<String> tweetMessage = Arrays.asList(message);
                 for (String word: tweetMessage) {
-                    word = word.replaceAll("[^a-zA-Z]","");
+                    word = word.toLowerCase().replaceAll("http://[^\\s]+", "");
+                    words.add(word);
                 }
 
-                //changed from 17 to 15 
-                Long twtID = Long.valueOf(line.substring(0,15));
+                Long twtID = Long.valueOf(line.substring(0,17));
+                System.out.println(twtID);
               
                 Tweet tweet = new Tweet(twtID, tweetMessage);
 
                 collection.add(tweet);
-
             }
+
+              // remove all the stop words
+            words.removeAll(stopWords);
+            
+            Writer writer = new FileWriter("preprocessingresult.txt", false); //overwrites file
+            for (String word: words) { 
+                writer.write(word + System.lineSeparator());
+            
+            }
+
+            writer.close();
+
 
 
             bufferReader.close();
+            System.out.println("collection end");
 
 
         }catch (FileNotFoundException e) {
@@ -57,35 +74,23 @@ public class RetrievalSystem {
 
 
         InvertedIndex invertedIndex = new InvertedIndex();
+        for (Tweet tweet: collection ) {
+            // System.out.println(tweet.getTweet());
 
-        //File f = new File("Processed.txt");
-        File f = new File("preprocessingresult.txt");
-
-        FileReader fr = new FileReader(f);
-        BufferedReader bufferReader = new BufferedReader(fr);
-
-
-        String line;
-        while ((line = bufferReader.readLine()) != null) {
-
-            for (Tweet tweet: collection ) {
-                int wordFreq = 0;
-                for (String wordInTweet: tweet.getTweet()) {
-                    if (wordInTweet.toLowerCase().equals(line)) {
-                        wordFreq++;
-
-                    }
+            int wordFreq = 0;
+            for (String wordInTweet: tweet.getTweet()) {
+                if (words.contains(wordInTweet)) {
+                    wordFreq = tweet.getWordFrequency(wordInTweet);
+                    invertedIndex.addToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
 
                 }
-                if (!(wordFreq == 0)){
-                  invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq));
-                }
-
             }
+            
+
+        
 
         }
         invertedIndex.printIndex();
-        bufferReader.close();
 
 
         //get the user input for the query
@@ -190,35 +195,31 @@ public class RetrievalSystem {
 
 
     }
+    private static ArrayList<String> getStopWords() throws IOException{
+        // extract stop words from stopwords.txt and store in array
+        ArrayList<String> stopWords = new ArrayList<String>();
+
+        // open file and store words in array
+        try {
+            File input = new File("StopWords.txt");
+            Scanner scanner = new Scanner(input);
+
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                stopWords.add(word);
+            }
+
+            // close scanner
+            scanner.close();
+        }   catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+
+        }
+        return stopWords;
+
+
+    }
 }
 
 
-
-        //     // for each word from the preprocessor
-
-        //     // loop through each tweet and note down how many times that word appears in each tweet
-
-
-        //     // File input = new File("Trec_microblog11 copy.txt");
-        //     // // File input = new File("Trec_microblog11.txt");
-
-        //     // System.out.println("Opened successfully");
-        //     // Scanner scanner = new Scanner(input);
-
-        //     // // while (scanner.hasNext()) {
-        //     // //     // change word to lower case
-        //     // //     String word = scanner.next().toLowerCase();
-        //     // //     System.out.println(word.charAt(0));
-
-
-        //     // // }
-
-        //     // while (scanner.hasNextLine()) {
-        //     //     String tweetID = scanner.nextLine();
-
-
-        //     //     String arr[] = tweetID.split("	", 2);
-        //     //     System.out.println(arr[0]);
-
-        //     // }
-        //     // scanner.close();

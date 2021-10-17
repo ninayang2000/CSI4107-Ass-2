@@ -24,6 +24,14 @@ public class InvertedIndex {
     // }
 
 
+  public Map<String, Posting> getInvertedIndex() {
+      return invertedIndex;
+    }
+
+    public void setInvertedIndex(Map<String, Posting> invertedIndex) {
+      this.invertedIndex = invertedIndex;
+    }
+
   public Map<String, Posting> getMap(){
     return invertedIndex;
   }

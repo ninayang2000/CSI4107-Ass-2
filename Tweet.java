@@ -29,4 +29,16 @@ public class Tweet {
         this.tweetID = tweetID;
     }
 
+    public int getWordFrequency(String word) {
+        int wordFreq = 0; 
+        for (String w: this.getTweet()) {
+            if (w.equals(word)) {
+                wordFreq++;
+            }
+
+
+        }
+        return wordFreq; 
+    }
+
 }
