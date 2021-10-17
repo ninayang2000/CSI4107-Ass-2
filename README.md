@@ -1,15 +1,19 @@
 # CSI4107
 
-**Team members **
+**Team members**
 
-Name - Student number 
+Name - Student number
+
 Anna Yang - 300272200
+
 Nina Yang - 300271696
+
 Eve Alshehri - 300023661
 
 
 
-**Work distribution **
+
+# **Work distribution**
 
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. 
 Nina was in charge of step 1 - preprocessing. 
@@ -18,13 +22,13 @@ Eve was in charge of step 3 - Retrieval and Ranking.
 Since each subsequent step required input from the previous step, each of us tried to work fast and we explained our code and answered each other's questions. 
 After the basic retrieval system was completed, all members brainstormed ways we could optimize and improve the system. Finally, Eve worked on the evaluation and results file while Anna and Nina worked on the report. 
 
-**Functionality of program **
+# **Functionality of program**
 
 The program implements an Information Retrieval System based for a collection of Twitter messages. The system is located in RetrievalSystem.java and calls on functions from other java files based on functionality. We used java to write the program. 
 Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt and StopWords.txt as input files. The results of each query can be found in results.txt.
 
 
-**Instructions on how to run program **
+# **Instructions on how to run program**
 
 Please follow the following steps to run our program:
 
@@ -34,8 +38,9 @@ Please follow the following steps to run our program:
 4. The results should now be in a file named “results.txt” (please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like) 
 
 
-Algorithms, data structures and optimisations
-**1. Preprocessing **
+# Algorithms, data structures and optimisations
+
+**1. Preprocessing**
 
 Preprocessing was implemented through a number of sequential steps. In preparation for this, a stopword file was created. This was done by inserting all the stop words into an array. Note, all the stop words are in lower case. A stemmer was not used. 
 
@@ -46,7 +51,8 @@ Finally, the preprocessed words were added to another file named preprocessingre
 In the preprocessing step, we used two main data structures which are array lists and sets respectively. The set allowed us to avoid duplicate words from being inserted, whilst the array list simplified the stop words removal process since we could utilise built in functions. 
 
 
-**2. Indexing **
+**2. Indexing**
+
 Before constructing the index, we first read through each of the tweets in Trec_microblog11.txt and stored the tweetID and message in a “tweet” class that we made.
 
 We used a hash map for the inverted index where it uses the tokens obtained from the preprocessing module as the key and an array of tuples which contain a tweetID and word frequency as the associated value. An example is shown below:
@@ -73,7 +79,8 @@ For preprocessed word in preprocessed word list {
 This simple change sped up the construction of the inverted exponentially. 
 
 
-**3. Retrieving and ranking **
+**3. Retrieving and ranking**
+
 
 
 Create “Query” class
@@ -94,7 +101,7 @@ We performed retrieval and ranking for each query based on the following steps a
 
 Please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like. 
 
-**5. Evaluation **
+**5. Evaluation**
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ​​./trec_eval Trec_microblog11-qrels.txt results.txt
 
@@ -132,7 +139,7 @@ P_1000                  all     0.0419
 
 
 
-**Sample Results **
+**Sample Results**
 
 The vocabulary size is 59,413 words 
 
@@ -238,8 +245,8 @@ timer
 honecker
 lanarak
 
-**Sample results **
-**First 10 answers to query 1 **
+**Sample results**
+**First 10 answers to query 1**
 
 1 Q0 30260724248870912 1 1.0 myRun
 1 Q0 30198105513140224 2 0.9936888200553103 myRun
@@ -253,8 +260,7 @@ lanarak
 1 Q0 30500781002063872 10 0.8463497262447456 myRun
 
 
-**First 10 answers to query 25 
-**
+**First 10 answers to query 25**
 25 Q0 31738694356434944 1 1.0 myRun
 25 Q0 32609015158542336 2 1.0 myRun
 25 Q0 31550836899323904 3 1.0 myRun
@@ -268,5 +274,5 @@ lanarak
 
 
 
-**Discussion of results **
+**Discussion of results**
 We were very happy with our results which ended up being: MAP at around 0.2658, P@5 at 0.3837 and P@10 at 0.3163. If we had more time we would have liked to implement stemming and perhaps looked into separating concatenated tokens such as those of hashtags. We believe that the previously mentioned methods could have helped improve our results. However, in saying such, we believe that our current system provides solid and adequate retrieval and ranking of results. 
