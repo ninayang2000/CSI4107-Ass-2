@@ -62,6 +62,8 @@ public class RetrievalSystem {
 
             bufferReader.close();
             System.out.println("collection end");
+            System.out.println("retrieving results...");
+
 
 
         }catch (FileNotFoundException e) {
@@ -234,7 +236,7 @@ public class RetrievalSystem {
 
         // TO CHANGE: GET ACTUAL QUERY ID
 
-        rankingOperations.showResults(ranking, "MB" + q.getqueryID());
+        rankingOperations.showResults(ranking, ""+q.getqueryID());
  
 
 
