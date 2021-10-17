@@ -1,45 +1,69 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
+import java.io.Writer;
+import java.util.*;
+import java.io.FileWriter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 public class RetrievalSystem {
 
     public static void main(String args[]) throws IOException {
-
-        List<Tweet> collection = new ArrayList<Tweet>(); 
+        Set<String> words = new HashSet<String>();
+        ArrayList<String> stopWords = getStopWords();
+        List<Tweet> collection = new ArrayList<Tweet>();
+        List<Query> queryList = new ArrayList<Query>(49);
 
 
         try {
-            File input = new File("Trec_microblog11 copy.txt");
-            
+
+            File input = new File("Trec_microblog11.txt");
+
             FileReader fr = new FileReader(input);
-            BufferedReader bufferReader = new BufferedReader(fr); 
+            BufferedReader bufferReader = new BufferedReader(fr);
 
-            
-            String line; 
+
+            String line;
+            boolean isFirstLine = true;
             while ((line = bufferReader.readLine()) != null) {
+                if(isFirstLine) {
+                    isFirstLine = false;
+                    line = line.substring(1);
+                }
+  
 
-
-                String[] message = line.substring(18).split("\\s+");
+                // split lines by space
+                String[] message = line.toLowerCase().substring(18).replaceAll("http://[^\\s]+", "").replaceAll("[^a-zA-Z]"," ").split("\\s+");
                 List<String> tweetMessage = Arrays.asList(message);
                 for (String word: tweetMessage) {
-                    word = word.replaceAll("[^a-zA-Z]","");
+                    words.add(word);
                 }
-                Tweet tweet = new Tweet(line.substring(0,17), tweetMessage);
+
+                Long twtID = Long.valueOf(line.substring(0,17));
+              
+                Tweet tweet = new Tweet(twtID, tweetMessage);
 
                 collection.add(tweet);
-                
             }
 
+              // remove all the stop words
+            words.removeAll(stopWords);
+            
+            Writer writer = new FileWriter("preprocessingresult.txt", false); //overwrites file
+            for (String word: words) { 
+                writer.write(word + System.lineSeparator());
+            
+            }
 
-            bufferReader.close(); 
+            writer.close();
+
+
+
+            bufferReader.close();
+            System.out.println("collection end");
+            System.out.println("retrieving results...");
+
 
 
         }catch (FileNotFoundException e) {
@@ -47,73 +71,206 @@ public class RetrievalSystem {
             e.printStackTrace();
             return;
 
-        } 
+        }
 
 
 
         InvertedIndex invertedIndex = new InvertedIndex();
+        for (Tweet tweet: collection ) {
+            // System.out.println(tweet.getTweet());
 
-        // File f = new File("Processed.txt");
-        File f = new File("preprocessed.txt");
-            
-        FileReader fr = new FileReader(f);
-        BufferedReader bufferReader = new BufferedReader(fr); 
+            int wordFreq = 0;
+            for (String wordInTweet: tweet.getTweet()) {
+                wordInTweet = wordInTweet.toLowerCase(); 
+                wordFreq = tweet.getWordFrequency(wordInTweet);
 
-        
-        String line; 
-        while ((line = bufferReader.readLine()) != null) {
-
-            for (Tweet tweet: collection ) {
-                int wordFreq = 0; 
-                for (String wordInTweet: tweet.getTweet()) {
-                    if (wordInTweet.toLowerCase().equals(line)) {
-                        wordFreq++; 
+                if (words.contains(wordInTweet)) {
+                    if (!invertedIndex.getInvertedIndex().containsKey(wordInTweet)) {
                         
+                        invertedIndex.addNewTermToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
+    
+                    } else {
+                        if (!invertedIndex.tupleExists(wordInTweet, tweet.getTweetID())) {
+                            invertedIndex.addExistingTermToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
+
+                        }
+
+
                     }
 
                 }
-                invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq)); 
             }
             
+
+        
+
+        }
+        // invertedIndex.printIndex();
+
+
+        File input = new File("topics_MB1-49.txt");
+        FileReader reader = new FileReader(input);
+        BufferedReader bReader = new BufferedReader(reader);
+
+        String row;
+        String query = "";
+        int queryID= -1;
+
+        while ((row = bReader.readLine()) != null) {
+
+          if(row.startsWith("<title>")){
+				
+            //find the </title> index
+            int i = row.indexOf("</title>");  
+            query = row.substring(8, i);
+            // System.out.println(query);
+        } else if (row.startsWith("<num>")) {
+          
+				
+            //find the MB index
+            int i = row.indexOf("MB");
+            queryID = Integer.parseInt(row.substring(i+2, i+5));
+
+            
+            // queryID = Integer.parseInt(_num);
+            // System.out.println(queryID);
+
+        } else if(row.startsWith("</top>")){
+				          
+          //end of test query, create a query test and add to result
+          queryList.add(new Query(queryID,query));
+          
+        }
+      }
+
+      bReader.close();
+
+      for (Query q: queryList) {
+        
+        query = q.getquery();
+        String[] queryWords = query.split("\\s+");
+        int N = collection.size();
+        RtrvlRank rankingOperations = new RtrvlRank();
+        double queryLength=0.0;
+
+        Map<String, Integer> queryFrequencies = rankingOperations.freq(queryWords);
+        Map.Entry<String, Integer> maxFreq = rankingOperations.maxTF(queryFrequencies);
+
+
+        NavigableMap<Double, List<Long>> ranking = new TreeMap<Double,List<Long>>();
+        Map <Long, ScoreLength> score_length = new HashMap <Long, ScoreLength>();
+
+        Set<String> word_set = new HashSet<String>();
+        for (int i = 0; i<queryWords.length;i++){
+          word_set.add(queryWords[i]);
         }
 
-        invertedIndex.printIndex();
-        bufferReader.close(); 
+
+
+        //looping on the list of words in the query
+        for (String word: word_set) {
+            if(invertedIndex.getMap().containsKey(word)){ //check if a word in the query is found in the index
+
+              //get posting list and DF
+              Posting posting = invertedIndex.getMap().get(word);
+
+              //Document Frequence of the current term
+              int word_docFrequency = posting.getDocf();
+              //The maximum Term Frequence in the Query NOT the Collection
+              int maxQueryFreq = maxFreq.getValue();
+
+              //Computing the weight of the term with respect to the query words
+              double termWeight = rankingOperations.weight(N,queryFrequencies.get(word),word_docFrequency,true,maxQueryFreq);
+              //We will take the square root of this number later.
+              queryLength = queryLength + Math.pow(termWeight,2);
+
+              // System.out.print(word);
+              // System.out.println(": "+queryFrequencies.get(word) + " "+termWeight);
+
+
+              for(documentTfTuple doc:posting.getPostingList()){//for each document in the posting list
+
+                int word_termFrequency = doc.getTermFrequency();//term frequency of the word in the document
+                Long docID = doc.getTweetID();//get the ID
+
+                //compute the weight of the word in terms of the document
+                double docWeight = rankingOperations.weight(N,word_termFrequency,word_docFrequency,false,1);
+
+
+                if(score_length.containsKey(docID)){
+
+                    ScoreLength score_length_pair = score_length.get(docID);
+
+                    double newScore = score_length_pair.getScore() + (docWeight*termWeight);
+                    score_length.get(docID).setScore(newScore);
+
+                    double newLength = score_length_pair.getLength() + Math.pow(docWeight,2);
+                    score_length.get(docID).setLength(newLength);
+                }else{
+                  double newScore =  docWeight*termWeight;
+                  double newLength = Math.pow(docWeight,2);
+                  score_length.put(docID,new ScoreLength(newScore,newLength));
+                }
+              }
+
+            }
+        }
+
+        for(Map.Entry<Long,ScoreLength> entry:score_length.entrySet()){
+
+            Long docIDRanking = entry.getKey();
+            ScoreLength value_node = entry.getValue();
+            double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
+
+            // System.out.println(final_score + ", ID: " + docIDRanking);
+            Double ranking_key = Double.valueOf(final_score);
+            if(!ranking.containsKey(ranking_key)){
+              List<Long> rank_array = new ArrayList<Long>();
+                rank_array.add(docIDRanking);
+                ranking.put(ranking_key,rank_array);
+            }else{
+                  ranking.get(ranking_key).add(docIDRanking);
+            }
+
+        }
+
+        // TO CHANGE: GET ACTUAL QUERY ID
+
+        rankingOperations.showResults(ranking, ""+q.getqueryID());
+ 
+
 
     }
 
+      }
 
 
     
+    private static ArrayList<String> getStopWords() throws IOException{
+        // extract stop words from stopwords.txt and store in array
+        ArrayList<String> stopWords = new ArrayList<String>();
+
+        // open file and store words in array
+        try {
+            File input = new File("StopWords.txt");
+            Scanner scanner = new Scanner(input);
+
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                stopWords.add(word);
+            }
+
+            // close scanner
+            scanner.close();
+        }   catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+
+        }
+        return stopWords;
+
+
+    }
 }
 
 
-
-        //     // for each word from the preprocessor 
-
-        //     // loop through each tweet and note down how many times that word appears in each tweet
-
-
-        //     // File input = new File("Trec_microblog11 copy.txt");
-        //     // // File input = new File("Trec_microblog11.txt");
-
-        //     // System.out.println("Opened successfully");
-        //     // Scanner scanner = new Scanner(input);
-
-        //     // // while (scanner.hasNext()) {
-        //     // //     // change word to lower case
-        //     // //     String word = scanner.next().toLowerCase();
-        //     // //     System.out.println(word.charAt(0));
-
-                
-        //     // // }
-        
-        //     // while (scanner.hasNextLine()) {
-        //     //     String tweetID = scanner.nextLine(); 
-
-                
-        //     //     String arr[] = tweetID.split("	", 2);
-        //     //     System.out.println(arr[0]);
-
-        //     // }
-        //     // scanner.close();
