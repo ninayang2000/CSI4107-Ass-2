@@ -13,10 +13,12 @@ public class RetrievalSystem {
         Set<String> words = new HashSet<String>();
         ArrayList<String> stopWords = getStopWords();
         List<Tweet> collection = new ArrayList<Tweet>();
+        List<Query> queryList = new ArrayList<Query>(49);
+
 
         try {
 
-            File input = new File("Trec_microblog11 copy.txt");
+            File input = new File("Trec_microblog11.txt");
 
             FileReader fr = new FileReader(input);
             BufferedReader bufferReader = new BufferedReader(fr);
@@ -101,15 +103,49 @@ public class RetrievalSystem {
         
 
         }
-        invertedIndex.printIndex();
+        // invertedIndex.printIndex();
 
 
-        //get the user input for the query
-        Scanner userinput = new Scanner(System.in);
-        String query = userinput.nextLine(); //read the string
+        File input = new File("topics_MB1-49.txt");
+        FileReader reader = new FileReader(input);
+        BufferedReader bReader = new BufferedReader(reader);
 
-        //from this point on, all the lines of code can be in a sepcialized class
-        //List<String> queryWords = Arrays.asList(query.split("\\s+"));
+        String row;
+        String query = "";
+        int queryID= -1;
+
+        while ((row = bReader.readLine()) != null) {
+
+          if(row.startsWith("<title>")){
+				
+            //find the </title> index
+            int i = row.indexOf("</title>");  
+            query = row.substring(8, i);
+            // System.out.println(query);
+        } else if (row.startsWith("<num>")) {
+          
+				
+            //find the MB index
+            int i = row.indexOf("MB");
+            queryID = Integer.parseInt(row.substring(i+2, i+5));
+
+            
+            // queryID = Integer.parseInt(_num);
+            // System.out.println(queryID);
+
+        } else if(row.startsWith("</top>")){
+				          
+          //end of test query, create a query test and add to result
+          queryList.add(new Query(queryID,query));
+          
+        }
+      }
+
+      bReader.close();
+
+      for (Query q: queryList) {
+        
+        query = q.getquery();
         String[] queryWords = query.split("\\s+");
         int N = collection.size();
         RtrvlRank rankingOperations = new RtrvlRank();
@@ -120,12 +156,6 @@ public class RetrievalSystem {
 
 
         NavigableMap<Double, List<Long>> ranking = new TreeMap<Double,List<Long>>();
-      /*ranking.put(new Float(0.67F),new Long(56378954123L));
-        ranking.put(new Float(0.79F),new Long(657487233244L));
-        ranking.put(new Float(0.99F),new Long(7852636378524L));
-        ranking.put(new Float(0.87F),new Long(83524352424L));
-        rankingOperations.showResults(ranking);*/
-
         Map <Long, ScoreLength> score_length = new HashMap <Long, ScoreLength>();
 
         Set<String> word_set = new HashSet<String>();
@@ -190,7 +220,7 @@ public class RetrievalSystem {
             ScoreLength value_node = entry.getValue();
             double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
 
-            System.out.println(final_score + ", ID: " + docIDRanking);
+            // System.out.println(final_score + ", ID: " + docIDRanking);
             Double ranking_key = Double.valueOf(final_score);
             if(!ranking.containsKey(ranking_key)){
               List<Long> rank_array = new ArrayList<Long>();
@@ -202,10 +232,18 @@ public class RetrievalSystem {
 
         }
 
-        rankingOperations.showResults(ranking);
+        // TO CHANGE: GET ACTUAL QUERY ID
+
+        rankingOperations.showResults(ranking, "MB" + q.getqueryID());
+ 
 
 
     }
+
+      }
+
+
+    
     private static ArrayList<String> getStopWords() throws IOException{
         // extract stop words from stopwords.txt and store in array
         ArrayList<String> stopWords = new ArrayList<String>();

@@ -44,17 +44,19 @@ public class RtrvlRank{
     return maxEntry;
   }
 
-  public void showResults(NavigableMap<Double, List<Long>> map){
+  public void showResults(NavigableMap<Double, List<Long>> map, String queryID){
     Set keys = map.descendingKeySet();
     Iterator i = keys.iterator();
     int rank=1;
+    
     while (i.hasNext()) {
       Double key = (Double) i.next();
       List<Long> value = (List<Long>) map.get(key);
       for(Long docID:value ){
-          System.out.println("MB01 Q0 "+docID+ " " + rank+" "+ key+" myRun");
+          System.out.println(queryID + " Q0 "+docID+ " " + rank+" "+ key+" myRun");
           rank = rank+1;
       }
     }
   }
 }
+
