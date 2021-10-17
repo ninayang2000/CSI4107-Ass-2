@@ -2,7 +2,6 @@
 
 **Team members**
 
-Name - Student number
 
 Anna Yang - 300272200
 
@@ -14,13 +13,14 @@ Eve Alshehri - 300023661
 
 
 # **Work distribution**
-
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. 
-Nina was in charge of step 1 - preprocessing. 
-Anna was in charge of step 2 - Indexing 
-Eve was in charge of step 3 - Retrieval and Ranking. 
+1. Nina was in charge of step 1 - preprocessing. 
+2. Anna was in charge of step 2 - Indexing 
+3. Eve was in charge of step 3 - Retrieval and Ranking. 
+
 Since each subsequent step required input from the previous step, each of us tried to work fast and we explained our code and answered each other's questions. 
-After the basic retrieval system was completed, all members brainstormed ways we could optimize and improve the system. Finally, Eve worked on the evaluation and results file while Anna and Nina worked on the report. 
+After the basic retrieval system was completed, all members brainstormed ways we could optimize and improve the system. Finally, Anna and Nina worked on the evaluation and results file as well as summarising our findings in the report. 
+
 
 # **Functionality of program**
 
@@ -56,10 +56,13 @@ In the preprocessing step, we used two main data structures which are array list
 Before constructing the index, we first read through each of the tweets in Trec_microblog11.txt and stored the tweetID and message in a “tweet” class that we made.
 
 We used a hash map for the inverted index where it uses the tokens obtained from the preprocessing module as the key and an array of tuples which contain a tweetID and word frequency as the associated value. An example is shown below:
+```
+world [DF: 2]-> (952194402811904, 1)(349521863287848, 2)
+question [DF:1]-> {349520414155816,3)
+```
 
-world [DF: 2]-> (952194402811904, 1)(349521863287848, 2}
-Question [DF:1]-> {349520414155816,3)
 Initially our code was extremely inefficient and it took a tremendous amount of time to construct the inverted index. This was because we were looping through the preprocessed words and for each word we were looking through every tweet to see if that word appeared in the tweet ie.
+```
 For preprocessed word in preprocessed word list {
 	For tweet in collection {
 		For word in tweet {
@@ -67,14 +70,19 @@ For preprocessed word in preprocessed word list {
 		}
 	}
 }
+```
+
+
 After some analysis and careful consideration we decided to switch the order of the for loops by looking through the tweets and for each word in the tweet looking through the preprocessed words ie. 
+```
 For tweet in collection {
 	For word in tweet {
-For preprocessed word in preprocessed word list {
+		For preprocessed word in preprocessed word list {
 			… 
 		}
 	}
 }
+```
 
 This simple change sped up the construction of the inverted exponentially. 
 
@@ -93,57 +101,19 @@ Loop through array and evaluate each query
 We performed retrieval and ranking for each query based on the following steps after splitting each query to individual words. We made sure to transform each of these words to lowercase so that it matched exactly with our preprocessed words list. 
 
 
-[eve to write up how the algorithm works and any data structures/optimisations used]
-
-
 
 **4. Run program to see results.txt**
 
 Please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like. 
 
-**5. Evaluation**
-After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
-​​./trec_eval Trec_microblog11-qrels.txt results.txt
 
-This gave us the following results:
-
-num_q                   all     49
-num_ret                 all     36347
-num_rel                 all     2640
-num_rel_ret             all     2055
-map                     all     0.2658
-gm_map                  all     0.1226
-Rprec                   all     0.2817
-bpref                   all     0.2955
-recip_rank              all     0.5354
-iprec_at_recall_0.00    all     0.6149
-iprec_at_recall_0.10    all     0.4726
-iprec_at_recall_0.20    all     0.4199
-iprec_at_recall_0.30    all     0.3566
-iprec_at_recall_0.40    all     0.3327
-iprec_at_recall_0.50    all     0.2924
-iprec_at_recall_0.60    all     0.2254
-iprec_at_recall_0.70    all     0.1859
-iprec_at_recall_0.80    all     0.1550
-iprec_at_recall_0.90    all     0.1059
-iprec_at_recall_1.00    all     0.0371
-P_5                     all     0.3837
-P_10                    all     0.3163
-P_15                    all     0.3048
-P_20                    all     0.2898
-P_30                    all     0.2653
-P_100                   all     0.1814
-P_200                   all     0.1268
-P_500                   all     0.0732
-P_1000                  all     0.0419
-
-
-
-**Sample Results**
+# Sample Results
 
 The vocabulary size is 59,413 words 
 
 Sample of 100 tokens from vocabulary 
+```
+
 priscilla
 manjat
 manjar
@@ -244,10 +214,10 @@ kenyang
 timer
 honecker
 lanarak
+```
 
-**Sample results**
 **First 10 answers to query 1**
-
+```
 1 Q0 30260724248870912 1 1.0 myRun
 1 Q0 30198105513140224 2 0.9936888200553103 myRun
 1 Q0 30016851715031040 3 0.8857852417000207 myRun
@@ -258,9 +228,10 @@ lanarak
 1 Q0 30236884051435520 8 0.8463497262447456 myRun
 1 Q0 30554037510213632 9 0.8463497262447456 myRun
 1 Q0 30500781002063872 10 0.8463497262447456 myRun
-
+```
 
 **First 10 answers to query 25**
+```
 25 Q0 31738694356434944 1 1.0 myRun
 25 Q0 32609015158542336 2 1.0 myRun
 25 Q0 31550836899323904 3 1.0 myRun
@@ -271,8 +242,48 @@ lanarak
 25 Q0 31320463862931456 8 0.9008951031334103 myRun
 25 Q0 32541161675558912 9 0.893156366056288 myRun
 25 Q0 29974357501550592 10 0.7988958504439189 myRun
+```
+
+# Evaluation
+After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
+./trec_eval Trec_microblog11-qrels.txt results.txt
 
 
+This gave us the following results:
+```
 
-**Discussion of results**
+num_q                   all     49
+num_ret                 all     36347
+num_rel                 all     2640
+num_rel_ret             all     2055
+map                     all     0.2658
+gm_map                  all     0.1226
+Rprec                   all     0.2817
+bpref                   all     0.2955
+recip_rank              all     0.5354
+iprec_at_recall_0.00    all     0.6149
+iprec_at_recall_0.10    all     0.4726
+iprec_at_recall_0.20    all     0.4199
+iprec_at_recall_0.30    all     0.3566
+iprec_at_recall_0.40    all     0.3327
+iprec_at_recall_0.50    all     0.2924
+iprec_at_recall_0.60    all     0.2254
+iprec_at_recall_0.70    all     0.1859
+iprec_at_recall_0.80    all     0.1550
+iprec_at_recall_0.90    all     0.1059
+iprec_at_recall_1.00    all     0.0371
+P_5                     all     0.3837
+P_10                    all     0.3163
+P_15                    all     0.3048
+P_20                    all     0.2898
+P_30                    all     0.2653
+P_100                   all     0.1814
+P_200                   all     0.1268
+P_500                   all     0.0732
+P_1000                  all     0.0419
+
+
+```
+
+# Discussion of results
 We were very happy with our results which ended up being: MAP at around 0.2658, P@5 at 0.3837 and P@10 at 0.3163. If we had more time we would have liked to implement stemming and perhaps looked into separating concatenated tokens such as those of hashtags. We believe that the previously mentioned methods could have helped improve our results. However, in saying such, we believe that our current system provides solid and adequate retrieval and ranking of results. 
