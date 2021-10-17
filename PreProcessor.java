@@ -51,7 +51,7 @@ public class PreProcessor {
             words.removeAll(stopWords);
 
             // write words into new file 
-            Writer writer = new FileWriter("PreProcessed.txt", false); //overwrites file
+            Writer writer = new FileWriter("preprocessingresult.txt", false); //overwrites file
             for (String word: words) { 
                 writer.write(word + System.lineSeparator());
             
