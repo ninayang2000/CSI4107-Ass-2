@@ -11,6 +11,7 @@ public class RetrievalSystem {
     public static void main(String args[]) throws IOException {
 
         List<Tweet> collection = new ArrayList<Tweet>();
+        List<Query> queryList = new ArrayList<Query>(49);
 
 
         try {
@@ -66,10 +67,12 @@ public class RetrievalSystem {
 
 
         String line;
+        // each line of preprocessing results
         while ((line = bufferReader.readLine()) != null) {
 
             for (Tweet tweet: collection ) {
                 int wordFreq = 0;
+                //count how many time word from preprocessingresults is in the tweet
                 for (String wordInTweet: tweet.getTweet()) {
                     if (wordInTweet.toLowerCase().equals(line)) {
                         wordFreq++;
@@ -77,8 +80,11 @@ public class RetrievalSystem {
                     }
 
                 }
+
+                //if not 0, add to the index 
                 if (!(wordFreq == 0)){
                   invertedIndex.addToIndex(line, new documentTfTuple(tweet.getTweetID(), wordFreq));
+                  // System.out.println(tweet.getTweetID());
                 }
 
             }
@@ -89,12 +95,55 @@ public class RetrievalSystem {
 
 
         //get the user input for the query
-        Scanner userinput = new Scanner(System.in);
-        String query = userinput.nextLine(); //read the string
+        // change this to for loop 
+        // Scanner userinput = new Scanner(System.in);
+        // String query = userinput.nextLine(); //read the string
 
-        //from this point on, all the lines of code can be in a sepcialized class
+        File input = new File("topics_MB1-49.txt");
+        FileReader reader = new FileReader(input);
+        BufferedReader bReader = new BufferedReader(reader);
+
+        String row;
+        String query = "";
+        int queryID= -1;
+
+        while ((row = bReader.readLine()) != null) {
+
+          if(row.startsWith("<title>")){
+				
+            //find the </title> index
+            int i = row.indexOf("</title>");  
+            query = row.substring(8, i);
+            // System.out.println(query);
+        } else if (row.startsWith("<num>")) {
+          
+				
+            //find the MB index
+            int i = row.indexOf("MB");
+            queryID = Integer.parseInt(row.substring(i+2, i+5));
+
+            
+            // queryID = Integer.parseInt(_num);
+            // System.out.println(queryID);
+
+        } else if(row.startsWith("</top>")){
+				          
+          //end of test query, create a query test and add to result
+          queryList.add(new Query(queryID,query));
+          
+        }
+      }
+
+      for (Query q: queryList) {
+        // System.out.println(q.getqueryID());
+        // System.out.println(q.getquery());
+        query = q.getquery();
+         //from this point on, all the lines of code can be in a sepcialized class
         //List<String> queryWords = Arrays.asList(query.split("\\s+"));
         String[] queryWords = query.split("\\s+");
+        // for (String i: queryWords) {
+        //   System.out.println("\\" + i);
+        // }
         int N = collection.size();
         RtrvlRank rankingOperations = new RtrvlRank();
         double queryLength=0.0;
@@ -174,7 +223,7 @@ public class RetrievalSystem {
             ScoreLength value_node = entry.getValue();
             double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
 
-            System.out.println(final_score + ", ID: " + docIDRanking);
+            // System.out.println(final_score + ", ID: " + docIDRanking);
             Double ranking_key = Double.valueOf(final_score);
             if(!ranking.containsKey(ranking_key)){
               List<Long> rank_array = new ArrayList<Long>();
@@ -186,11 +235,24 @@ public class RetrievalSystem {
 
         }
 
-        rankingOperations.showResults(ranking);
+        // TO CHANGE: GET ACTUAL QUERY ID
+
+        rankingOperations.showResults(ranking, "MB" + q.getqueryID());
+ 
 
 
     }
-}
+
+      }
+
+
+
+
+       
+  }
+
+    
+
 
 
 
