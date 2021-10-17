@@ -61,7 +61,6 @@ public class RetrievalSystem {
 
 
             bufferReader.close();
-            System.out.println("collection end");
             System.out.println("retrieving results...");
 
 
@@ -120,24 +119,15 @@ public class RetrievalSystem {
 
           if(row.startsWith("<title>")){
 				
-            //find the </title> index
             int i = row.indexOf("</title>");  
             query = row.substring(8, i);
-            // System.out.println(query);
         } else if (row.startsWith("<num>")) {
           
-				
-            //find the MB index
             int i = row.indexOf("MB");
             queryID = Integer.parseInt(row.substring(i+2, i+5));
 
-            
-            // queryID = Integer.parseInt(_num);
-            // System.out.println(queryID);
-
         } else if(row.startsWith("</top>")){
 				          
-          //end of test query, create a query test and add to result
           queryList.add(new Query(queryID,query));
           
         }
@@ -147,7 +137,7 @@ public class RetrievalSystem {
 
       for (Query q: queryList) {
         
-        query = q.getquery();
+        query = q.getquery().toLowerCase();
         String[] queryWords = query.split("\\s+");
         int N = collection.size();
         RtrvlRank rankingOperations = new RtrvlRank();

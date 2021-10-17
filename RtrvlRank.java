@@ -60,10 +60,15 @@ public class RtrvlRank{
       for(Long docID:value ){
         // System.out.println((queryID + " Q0 "+docID+ " " + rank+" "+ key+" myRun"));
         count++;
+        if (count > 1000) {
+          break;
+        }
 
           writer.write((queryID + " Q0 "+docID+ " " + rank+" "+ key+" myRun" + System.lineSeparator()));
           rank = rank+1;
       }
+      
+
     }
     // System.out.println(count);
     writer.close();
