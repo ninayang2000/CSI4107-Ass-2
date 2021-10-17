@@ -33,7 +33,10 @@ public class RetrievalSystem {
                 for (String word: tweetMessage) {
                     word = word.replaceAll("[^a-zA-Z]","");
                 }
-                Long twtID = new Long(Long.parseLong(line.substring(0,17)));
+
+                //changed from 17 to 15 
+                Long twtID = Long.valueOf(line.substring(0,15));
+              
                 Tweet tweet = new Tweet(twtID, tweetMessage);
 
                 collection.add(tweet);
@@ -56,7 +59,7 @@ public class RetrievalSystem {
         InvertedIndex invertedIndex = new InvertedIndex();
 
         //File f = new File("Processed.txt");
-        File f = new File("preprocessed.txt");
+        File f = new File("preprocessingresult.txt");
 
         FileReader fr = new FileReader(f);
         BufferedReader bufferReader = new BufferedReader(fr);
@@ -81,9 +84,9 @@ public class RetrievalSystem {
             }
 
         }
-
         invertedIndex.printIndex();
         bufferReader.close();
+
 
         //get the user input for the query
         Scanner userinput = new Scanner(System.in);
@@ -170,8 +173,9 @@ public class RetrievalSystem {
             Long docIDRanking = entry.getKey();
             ScoreLength value_node = entry.getValue();
             double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
+
             System.out.println(final_score + ", ID: " + docIDRanking);
-            Double ranking_key = new Double(final_score);
+            Double ranking_key = Double.valueOf(final_score);
             if(!ranking.containsKey(ranking_key)){
               List<Long> rank_array = new ArrayList<Long>();
                 rank_array.add(docIDRanking);
