@@ -16,7 +16,7 @@ public class RetrievalSystem {
 
         try {
 
-            File input = new File("Trec_microblog11.txt");
+            File input = new File("Trec_microblog11 copy.txt");
 
             FileReader fr = new FileReader(input);
             BufferedReader bufferReader = new BufferedReader(fr);
@@ -32,15 +32,13 @@ public class RetrievalSystem {
   
 
                 // split lines by space
-                String[] message = line.substring(18).replaceAll("[^a-zA-Z]"," ").split("\\s+");
+                String[] message = line.toLowerCase().substring(18).replaceAll("http://[^\\s]+", "").replaceAll("[^a-zA-Z]"," ").split("\\s+");
                 List<String> tweetMessage = Arrays.asList(message);
                 for (String word: tweetMessage) {
-                    word = word.toLowerCase().replaceAll("http://[^\\s]+", "");
                     words.add(word);
                 }
 
                 Long twtID = Long.valueOf(line.substring(0,17));
-                System.out.println(twtID);
               
                 Tweet tweet = new Tweet(twtID, tweetMessage);
 
@@ -79,9 +77,22 @@ public class RetrievalSystem {
 
             int wordFreq = 0;
             for (String wordInTweet: tweet.getTweet()) {
+                wordInTweet = wordInTweet.toLowerCase(); 
+                wordFreq = tweet.getWordFrequency(wordInTweet);
+
                 if (words.contains(wordInTweet)) {
-                    wordFreq = tweet.getWordFrequency(wordInTweet);
-                    invertedIndex.addToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
+                    if (!invertedIndex.getInvertedIndex().containsKey(wordInTweet)) {
+                        
+                        invertedIndex.addNewTermToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
+    
+                    } else {
+                        if (!invertedIndex.tupleExists(wordInTweet, tweet.getTweetID())) {
+                            invertedIndex.addExistingTermToIndex(wordInTweet, new documentTfTuple(tweet.getTweetID(), wordFreq));
+
+                        }
+
+
+                    }
 
                 }
             }

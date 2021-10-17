@@ -36,23 +36,33 @@ public class InvertedIndex {
     return invertedIndex;
   }
 
-    public void addToIndex(String indexTerm, documentTfTuple tuple) {
+    public void addNewTermToIndex(String indexTerm, documentTfTuple tuple) {
         // if index term is not yet in hashmap
-        if(!invertedIndex.containsKey(indexTerm)) {
+
             // add the term in the hashmap
-            List<documentTfTuple> array = new ArrayList<documentTfTuple>();
-            array.add(tuple);
-            int df = array.size();
-            Posting posting = new Posting(df,array);
-            invertedIndex.put(indexTerm, posting);
-        } else {
-            invertedIndex.get(indexTerm).getPostingList().add(tuple);
-            int df = invertedIndex.get(indexTerm).getPostingList().size();
-            invertedIndex.get(indexTerm).setDocf(df);
-        }
-        // if term already in hash map -- only add the tuple
+        Set<documentTfTuple> array = new HashSet<documentTfTuple>();
+        array.add(tuple);
+        int df = array.size();
+        Posting posting = new Posting(df,array);
+        invertedIndex.put(indexTerm, posting);
+    }
+    public void addExistingTermToIndex(String indexTerm, documentTfTuple tuple) {
+        invertedIndex.get(indexTerm).getPostingList().add(tuple);
+        int df = invertedIndex.get(indexTerm).getPostingList().size();
+        invertedIndex.get(indexTerm).setDocf(df);
 
     }
+
+    public boolean tupleExists(String indexTerm, Long tweetID) {
+        for (documentTfTuple tf: invertedIndex.get(indexTerm).getPostingList()) {
+            if (tf.getTweetID().equals(tweetID)) {
+                return true; 
+
+            }
+        }
+        return false; 
+    }
+
 
     public void printIndex() {
         // System.out.println(invertedIndex.entrySet());

@@ -1,13 +1,16 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Posting {
 
 
   private int docf;
-  private List<documentTfTuple> postingList = new ArrayList<documentTfTuple>();
+  // private List<documentTfTuple> postingList = new ArrayList<documentTfTuple>();
+  private Set<documentTfTuple> postingList = new HashSet<documentTfTuple>(); 
 
-  public Posting(int docf,List<documentTfTuple> postingList) {
+  public Posting(int docf,Set<documentTfTuple> postingList) {
     this.docf = docf;
     this.postingList = postingList;
   }
@@ -20,11 +23,11 @@ public class Posting {
     this.docf = docf;
   }
 
-  public void setPostingList(List<documentTfTuple> postingList){
+  public void setPostingList(Set<documentTfTuple> postingList){
     this.postingList = postingList;
   }
 
-  public List<documentTfTuple> getPostingList(){
+  public Set<documentTfTuple> getPostingList(){
     return postingList;
   }
 }
