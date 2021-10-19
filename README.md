@@ -62,10 +62,10 @@ question [DF:1]-> {349520414155816,3)
 ```
 
 Initially our code was extremely inefficient and it took a tremendous amount of time to construct the inverted index. This was because we were looping through the preprocessed words and for each word we were looking through every tweet to see if that word appeared in the tweet ie.
-```java
-For preprocessed word in preprocessed word list {
-	For tweet in collection {
-		For word in tweet {
+```python
+for preprocessed word in preprocessed word list {
+	for tweet in collection {
+		for word in tweet {
 			…
 		}
 	}
@@ -74,10 +74,10 @@ For preprocessed word in preprocessed word list {
 
 
 After some analysis and careful consideration we decided to switch the order of the for loops by looking through the tweets and for each word in the tweet looking through the preprocessed words ie.
-```java
-For tweet in collection {
-	For word in tweet {
-		For preprocessed word in preprocessed word list {
+```python
+for tweet in collection {
+	for word in tweet {
+		for preprocessed word in preprocessed word list {
 			…
 		}
 	}
