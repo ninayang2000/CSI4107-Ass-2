@@ -18,7 +18,9 @@ public class RetrievalSystem {
 
         try {
 
-            File input = new File("Trec_microblog11.txt");
+            File input = new File("test.txt");
+            // File input = new File(ß"test.txt");
+
 
             FileReader fr = new FileReader(input);
             BufferedReader bufferReader = new BufferedReader(fr);
