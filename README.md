@@ -1,8 +1,6 @@
 # CSI4107
 
 **Team members**
-<img width="323" alt="Picture 1" src="https://user-images.githubusercontent.com/68538906/144455476-d010811b-1845-474a-a8fc-28421e397bc3.png">
-
 
 Anna Yang - 300272200
 
@@ -362,11 +360,17 @@ lanarak
 ```
 
 # Evaluation
+
+# BERT
+
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ./trec_eval Trec_microblog11-qrels.txt results.txt
 
-
 This gave us the following results:
+
+<img width="323" alt="Picture 1" src="https://user-images.githubusercontent.com/68538906/144455476-d010811b-1845-474a-a8fc-28421e397bc3.png">
+
+When comparing this with results from experiment one (below), it is evident that BERT performance is not as good. 
 ```
 num_q                   all     49
 num_ret                 all     36347
@@ -403,4 +407,8 @@ P_1000                  all     0.0419
 ```
 
 # Discussion of results
-We were very happy with our results which ended up being: MAP at around 0.2658, P@5 at 0.3837 and P@10 at 0.3163. If we had more time we would have liked to implement stemming and perhaps looked into separating concatenated tokens such as those of hashtags. We believe that the previously mentioned methods could have helped improve our results. However, in saying such, we believe that our current system provides solid and adequate retrieval and ranking of results.
+
+# Bert 
+Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. 
+
+ 
