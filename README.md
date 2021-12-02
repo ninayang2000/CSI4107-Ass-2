@@ -1,6 +1,7 @@
 # CSI4107
 
 **Team members**
+<img width="323" alt="Picture 1" src="https://user-images.githubusercontent.com/68538906/144455476-d010811b-1845-474a-a8fc-28421e397bc3.png">
 
 
 Anna Yang - 300272200
