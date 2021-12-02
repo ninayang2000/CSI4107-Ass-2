@@ -29,19 +29,19 @@ with open("Trec_microblog11.txt") as f:
         sen.append(result)
         tweetIds.append(tweetID)
 
-print(sen)
-print(tweetIds)
+# print(sen)
+# print(tweetIds)
 
-print("modelling")
-model = SentenceTransformer('bert-base-nli-mean-tokens')
+# print("modelling")
+model = SentenceTransformer('cardiffnlp/twitter-roberta-base')
+
+# model = SentenceTransformer('bert-base-nli-mean-tokens')
 #Encoding:
-print("embedding")
+# print("embedding")
 start = timeit.timeit()
 print("hello")
 sen_embeddings = model.encode(sen)
-print("here")
-end = timeit.timeit()
-print(end - start)
+
 
 
 
@@ -49,7 +49,7 @@ print(end - start)
 # with open("query.txt") as f:
 
 with open("topics_MB1-49.txt") as f:
-    with open('new_results.txt', 'w') as res:
+    with open('tweet_results.txt', 'w') as res:
         queryID = 1 
         for row in f:
             if (row.startswith("<title>")):
@@ -64,13 +64,16 @@ with open("topics_MB1-49.txt") as f:
                 for i in cosine_similarity([query_embed],sen_embeddings[0:]):
                     result = list(enumerate(i))
                     print(result)
-                    list3 = sorted(result, reverse= True, key = lambda x: x[1])[:10]
+                    list3 = sorted(result, reverse= True, key = lambda x: x[1])
                     print(list3)
                     rank = 1
                     for x in list3:
                         res.writelines(str(queryID) + " Q0 "+tweetIds[x[0]] + str(rank) +" "+ str(x[1])+" myRun" + "\n")
-                        print (queryID, i, tweetIds[x[0]], x[1])
+                        # print (queryID, i, tweetIds[x[0]], x[1])
                         # print(x[1])
                         rank = rank +1
                 res.write("\n")
-                queryID = queryID + 1
+                queryID = queryID + 1 
+
+end = timeit.timeit()
+print(end - start)
