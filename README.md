@@ -50,6 +50,8 @@ Please follow the following steps to run our program:
 3. Run the experiment1.py through the command line: python3 experiment1.py
 4. The results should now be in a file named “results.txt”. There is also a “expected_results.txt” file, which is what the results.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
+# **Steps**
+
 **1. Preprocessing**
 
 
