@@ -9,14 +9,22 @@ Nina Yang - 300271696
 Eve Alshehri - 300023661
 
 
+# Intro 
+
+1. Out of the three experiments - we decided to perform experiment 1 and 3
+Use your system for Assignment 1 to produce initial results (1000 documents for each query), then re-rank them based on a new similarity scores between the query and each selected document. You can produce vectors for the query and each of the selected documents using various versions of sent2vec, doc2vec, BERT, or the universal sentence encoder. You can also use pre-trained word embeddings and assemble them to produce query/document embeddings.
+
+2. Query vector modification or query expansion based on pretrained word embeddings or other methods. For example, add synonyms to the query if there is similarity with more than one word in the query (or with the whole query vector). You can use pre-trained word embeddings (such as FastText, word2vec, GloVe, and others), preferably some build on a Twitter corpus, to be closer to your collection of documents.
+
+3. Use BERT or other neural models from the beginning, without the need on an initial classical IR system, to compute the similarity between the query and every document in the collection. This probably will take too long time, but look for ways to reduce the number of operations needed, especially if your system for Assignment 1 is not functional. For example, you can use a simple boolean index to restrict the calculations only to documents that have at least one query word.
 
 # **Work distribution**
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
 
-Converting results of assignment 1 into python so that we could run experiments - Nina
-Experiment 1 - Anna
-Experiment 2 - Eve
-Report - Nina
+1. Converting results of assignment 1 into python so that we could run experiments - Nina
+2. Experiment 1 - Anna
+3. Experiment 2 - Eve
+4. Report - Nina
 
 Assignment 1 was done in Java, however, BERT was most easily executed in Python.  As such, there was quite a lot of reformatting that had to be done to the results of our original assignment for us to proceed. Nina was in charge of this. Following on, Anna and Eve conducted an experiment each. Finally, Nina put together the final report and summarised all findings. 
 
@@ -32,11 +40,12 @@ Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt a
 
 Please follow the following steps to run our program:
 
-1. Open up the folder called submission
-2. Open up the file named “RetrievalSystem.java”
-3. Run the main function
-4. The results should now be in a file named “results.txt” (please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like)
+**Experiment 3**
 
+1. Install the sentence_transformer library through the command: pip install sentence-transformers
+2. Install the scikit-learn library through the command line: pip install -U scikit-learn
+3. Run the experiment1.py through the command line: python3 experiment1.py
+4. The results should now be in a file named “results.txt”. There is also a “expected_results.txt” file, which is what the results.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
 # Algorithms, data structures and optimizations
 
