@@ -1,6 +1,6 @@
 
 import re
-import string 
+import string
 sen = []
 tweetIds = []
 with open("test.txt") as f:
@@ -8,7 +8,7 @@ with open("test.txt") as f:
         tweetID = line[:18]
         tweet = line[18:]
         cleanLine = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', tweet)
-        table = str.maketrans(dict.fromkeys(string.punctuation)) 
+        table = str.maketrans(dict.fromkeys(string.punctuation))
         new_s = cleanLine.translate(table)
         sen.append(new_s)
         tweetIds.append(tweetID)
@@ -20,7 +20,7 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('bert-base-nli-mean-tokens')
 #Encoding:
 sen_embeddings = model.encode(sen)
-sen_embeddings.shape
+print("The shae of the sentence embedding %s"%sen_embeddings.shape)
 
 query = "Three years later, the coffin was still full of Jello"
 query_embed = model.encode(query)

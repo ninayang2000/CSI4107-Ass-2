@@ -21,23 +21,26 @@ import json
 # query_vectors_bert = v.vectors
 # print(query_vectors_bert)
 
- 
+
 # Opening JSON file
 f = open('data.json')
- 
+
 # returns JSON object as
 # a dictionary
 data = json.load(f)
- 
+
 # Iterating through the json
 # list
 # for i in data['tweets']:
 #     if (i['title']) == 'BBC World Service staff cuts':
 #         print(i['tweetID'])
 
-for i in data['title']:
-    print(i)
- 
+for entry in data:
+    print(entry["tweetID"])
+    print(entry["title"])
+
+
+sent2vec
 # Closing file
 f.close()
 

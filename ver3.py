@@ -15,23 +15,25 @@ v = Vectorizer()
 v.bert(sentences)
 query_vectors_bert = v.vectors
 
-for sent in query_vectors_bert[1:]: 
+
+
+for sent in query_vectors_bert[1:]:
     dist = spatial.distance.cosine(query_vectors_bert[0], sent)
     print(dist)
 
- 
+
 # # Opening JSON file
 # f = open('data.json')
- 
+
 # # returns JSON object as
 # # a dictionary
 # data = json.load(f)
- 
+
 # # Iterating through the json
 # # list
 # # for i in data['tweets']:
 # #     print(i)
- 
+
 # # Closing file
 # f.close()
 # sentences = [
@@ -48,7 +50,7 @@ for sent in query_vectors_bert[1:]:
 
 
 
-# # for sent in vectors_bert[1:]: 
+# # for sent in vectors_bert[1:]:
 # #     dist = spatial.distance.cosine(vectors_bert[0], sent)
 # #     print(dist)
 
@@ -63,7 +65,7 @@ for sent in query_vectors_bert[1:]:
 #     dist = spatial.distance.cosine(vectors_bert[0], vectors_bert)
 #     print(dist)
 
-# distance of 0 means they are identical 
+# distance of 0 means they are identical
 # dist_1 = spatial.distance.cosine(query_vectors_bert[0], vectors_bert[0])
 # dist_2 = spatial.distance.cosine(vectors_bert[0], vectors_bert[2])
 
