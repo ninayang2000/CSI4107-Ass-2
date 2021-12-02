@@ -48,7 +48,7 @@ sen_embeddings = model.encode(sen)
 # with open("query.txt") as f:
 
 with open("topics_MB1-49.txt") as f:
-    with open('updated_results.txt', 'w') as res:
+    with open('Results3.txt', 'w') as res:
         queryID = 1 
         for row in f:
             if (row.startswith("<title>")):
