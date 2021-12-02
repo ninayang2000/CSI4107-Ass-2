@@ -32,11 +32,12 @@ Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt a
 
 Please follow the following steps to run our program:
 
-1. Open up the folder called submission
-2. Open up the file named “RetrievalSystem.java”
-3. Run the main function
-4. The results should now be in a file named “results.txt” (please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like)
+# Experiment 3
 
+1. Install the sentence_transformer library through the command: pip install sentence-transformers
+2. Install the scikit-learn library through the command line: pip install -U scikit-learn
+3. Run the experiment1.py through the command line: python3 experiment1.py
+4. The results should now be in a file named “results.txt”. There is also a “expected_results.txt” file, which is what the results.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
 # Algorithms, data structures and optimizations
 
