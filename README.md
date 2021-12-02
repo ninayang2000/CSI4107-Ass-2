@@ -13,10 +13,10 @@ Eve Alshehri - 300023661
 # **Work distribution**
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
 
-Converting results of assignment 1 into python so that we could run experiments - Nina
-Experiment 1 - Anna
-Experiment 2 - Eve
-Report - Nina
+1. Converting results of assignment 1 into python so that we could run experiments - Nina
+2. Experiment 1 - Anna
+3. Experiment 2 - Eve
+4. Report - Nina
 
 Assignment 1 was done in Java, however, BERT was most easily executed in Python.  As such, there was quite a lot of reformatting that had to be done to the results of our original assignment for us to proceed. Nina was in charge of this. Following on, Anna and Eve conducted an experiment each. Finally, Nina put together the final report and summarised all findings. 
 
