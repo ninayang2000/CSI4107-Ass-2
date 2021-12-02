@@ -114,7 +114,7 @@ To do this we used the cosine_similiarity function from the sklearn library.
 
 # Evaluation
 
-# Discussion of results
+## Results
 
 **Experiment 3**
 
