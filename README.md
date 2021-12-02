@@ -161,7 +161,7 @@ P_1000                  all     0.0419
 
 ```
 
-# Discussion of results
+## Discussion of results
 
 **Experiment 3** 
 
