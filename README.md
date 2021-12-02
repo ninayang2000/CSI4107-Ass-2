@@ -34,7 +34,7 @@ Assignment 1 was done in Java, however, BERT was most easily executed in Python.
 
 The program implements an improved Information Retrieval System based for a collection of Twitter messages. In the previous assignment, we created a ‘Tweet’ class which stored the Tweet Id and message. We used a hash map for the inverted index where it uses the tokens obtained from the preprocessing module as the key and an array of tuples which contain a tweetID and word frequency as the associated value.
 
-In this assignment we represented words and sentences in a vector form and utilised more recent neural information retrieval methods such as BERT to achieve better evaluation scores. In the first experiment, each sentence was represented as a vector, whereas in the second experiment, each word was represented as a vector. 
+In this assignment we represented words and sentences in a vector form and utilised more recent neural information retrieval methods such as BERT to achieve better evaluation scores. In the experiment3, each sentence was represented as a vector and then we used cosine to find similarity.
 
 Experiment 3 is located in experiment3.py and experiment 2 is located in experiment2.py. Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt and StopWords.txt as input files. The results of each query can be found in results3.txt and results2.txt respectively. 
 
@@ -83,37 +83,38 @@ We used Cosine Distance to calculate the similarity between two documents. Cosin
 To do this we used the cosine_similiarity function from the sklearn library. 
 
 
-**First 10 answers to query 1**
+**First 10 answers to query 3 from best system**
 ```
-1 Q0 30260724248870912 1 1.0 myRun
-1 Q0 30198105513140224 2 0.9936888200553103 myRun
-1 Q0 30016851715031040 3 0.8857852417000207 myRun
-1 Q0 30016488928706560 4 0.8857852417000207 myRun
-1 Q0 30167063326629888 5 0.8857852417000207 myRun
-1 Q0 30275282464153600 6 0.8857852417000207 myRun
-1 Q0 30244402504929280 7 0.8463497262447456 myRun
-1 Q0 30236884051435520 8 0.8463497262447456 myRun
-1 Q0 30554037510213632 9 0.8463497262447456 myRun
-1 Q0 30500781002063872 10 0.8463497262447456 myRun
+3 Q0 29278582916251649	1 0.9030514 myRun
+3 Q0 34410414846517248	2 0.8982343 myRun
+3 Q0 35088534306033665	3 0.89789546 myRun
+3 Q0 33254598118473728	4 0.8800545 myRun
+3 Q0 34682906718908416	5 0.8780651 myRun
+3 Q0 29296574815272960	6 0.8724812 myRun
+3 Q0 32809006015713280	7 0.8602185 myRun
+3 Q0 32273316047757312	8 0.85713917 myRun
+3 Q0 34728356083666945	9 0.8556447 myRun
+3 Q0 32204788955357184	10 0.8442358 myRun
 ```
 
-**First 10 answers to query 25**
+**First 10 answers to query 20 from best system**
 ```
-25 Q0 31738694356434944 1 1.0 myRun
-25 Q0 32609015158542336 2 1.0 myRun
-25 Q0 31550836899323904 3 1.0 myRun
-25 Q0 31286354960715777 4 1.0 myRun
-25 Q0 30093525102108674 5 0.9008951031334103 myRun
-25 Q0 32685391781830656 6 0.9008951031334103 myRun
-25 Q0 32528974961713152 7 0.9008951031334103 myRun
-25 Q0 31320463862931456 8 0.9008951031334103 myRun
-25 Q0 32541161675558912 9 0.893156366056288 myRun
-25 Q0 29974357501550592 10 0.7988958504439189 myRun
+20 Q0 30245154598158337 1 0.9095361 myRun
+20 Q0 31747239311314944 2 0.9091542 myRun
+20 Q0 30986955508424704 3 0.87753177 myRun
+20 Q0 31777427092938752 4 0.86503893 myRun
+20 Q0 31492472911691776 5 0.8605448 myRun
+20 Q0 29958466130939904 6 0.8590292 myRun
+20 Q0 31948737517453312 7 0.8533156 myRun
+20 Q0 33247153149190144 8 0.852332 myRun
+20 Q0 30727342653444098 9 0.84897375 myRun
+20 Q0 31951627434860544 10 0.8485288 myRun
+
 ```
 
 # Evaluation
 
-# BERT
+**BERT**
 
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ./trec_eval Trec_microblog11-qrels.txt results.txt
