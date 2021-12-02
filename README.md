@@ -11,8 +11,8 @@ Eve Alshehri - 300023661
 
 # Intro 
 
-1. Out of the three experiments - we decided to perform experiment 1 and 3
-Use your system for Assignment 1 to produce initial results (1000 documents for each query), then re-rank them based on a new similarity scores between the query and each selected document. You can produce vectors for the query and each of the selected documents using various versions of sent2vec, doc2vec, BERT, or the universal sentence encoder. You can also use pre-trained word embeddings and assemble them to produce query/document embeddings.
+Out of the three experiments - we decided to perform experiment 1 and 3
+1. Use your system for Assignment 1 to produce initial results (1000 documents for each query), then re-rank them based on a new similarity scores between the query and each selected document. You can produce vectors for the query and each of the selected documents using various versions of sent2vec, doc2vec, BERT, or the universal sentence encoder. You can also use pre-trained word embeddings and assemble them to produce query/document embeddings.
 
 2. Query vector modification or query expansion based on pretrained word embeddings or other methods. For example, add synonyms to the query if there is similarity with more than one word in the query (or with the whole query vector). You can use pre-trained word embeddings (such as FastText, word2vec, GloVe, and others), preferably some build on a Twitter corpus, to be closer to your collection of documents.
 
@@ -22,7 +22,7 @@ Use your system for Assignment 1 to produce initial results (1000 documents for 
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
 
 1. Converting results of assignment 1 into python so that we could run experiments - Nina
-2. Experiment 1 - Anna
+2. Experiment 3 - Anna
 3. Experiment 2 - Eve
 4. Report - Nina
 
@@ -32,8 +32,11 @@ Assignment 1 was done in Java, however, BERT was most easily executed in Python.
 
 # **Functionality of program**
 
-The program implements an Information Retrieval System based for a collection of Twitter messages. The system is located in RetrievalSystem.java and calls on functions from other java files based on functionality. We used java to write the program.
-Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt and StopWords.txt as input files. The results of each query can be found in results.txt.
+The program implements an improved Information Retrieval System based for a collection of Twitter messages. In the previous assignment, we created a ‘Tweet’ class which stored the Tweet Id and message. We used a hash map for the inverted index where it uses the tokens obtained from the preprocessing module as the key and an array of tuples which contain a tweetID and word frequency as the associated value.
+
+In this assignment we represented words and sentences in a vector form and utilised more recent neural information retrieval methods such as BERT to achieve better evaluation scores. In the experiment3, each sentence was represented as a vector and then we used cosine to find similarity.
+
+Experiment 3 is located in experiment3.py and experiment 2 is located in experiment2.py. Our retrieval system requires Trec_microblog11.txt, Trec_microblog11-qrels.txt and StopWords.txt as input files. The results of each query can be found in results3.txt and results2.txt respectively. 
 
 
 # **Instructions on how to run program**
@@ -42,335 +45,79 @@ Please follow the following steps to run our program:
 
 **Experiment 3**
 
-1. Install the sentence_transformer library through the command: pip install sentence-transformers
-2. Install the scikit-learn library through the command line: pip install -U scikit-learn
-3. Run the experiment1.py through the command line: python3 experiment1.py
-4. The results should now be in a file named “results.txt”. There is also a “expected_results.txt” file, which is what the results.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
+1. Clone repository submitted
+2. Install the sentence_transformer library through the command: pip install sentence-transformers
+3. Install the scikit-learn library through the command line: pip install -U scikit-learn
+4. Run the experiment3.py through the command line: python3 experiment3.py
+5. The results should now be in a file named “Results3.txt”. There is also a “Expected_results3.txt” file, which is what the Results3.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
-# Algorithms, data structures and optimizations
+# **Steps**
 
 **1. Preprocessing**
 
-Preprocessing was implemented through a number of sequential steps. In preparation for this, a stopword file was created. This was done by inserting all the stop words into an array. Note, all the stop words are in lower case. A stemmer was not used.
 
-After opening up the microblog file, each line was read one by one. Within each line, the url was taken out, and the punctuation was replaced by spaces. Following, the line was split by spaces into words, which were then changed to lowercase. This step was necessary so that the appropriate stop words could be easily compared and extracted in the latter step. Following on, these altered words were added to an array, and the stop words were removed.
+Preprocessing was implemented through a number of sequential steps. In preparation for this, a stopword list was created. This was done by looking through stopwords.txt and inserting all the stop words into the list. Note, all the stop words are in lower case. A stemmer was not used. 
 
-Finally, the preprocessed words were added to another file named preprocessingresult.txt’, and this completes the entire preprocessing step.
+After opening up the microblog file, each line was read one by one. Within each line, the url was taken out, and the punctuation was replaced by spaces. Following, the line was split by spaces into words, which were then changed to lowercase. This step was necessary so that the appropriate stop words could be easily compared and extracted in the latter step. 
 
-In the preprocessing step, we used two main data structures which are array lists and sets respectively. The set allowed us to avoid duplicate words from being inserted, whilst the array list simplified the stop words removal process since we could utilize built in functions.
+Finally, the cleaned sentences which had the stopwords removed were joined back together into a sentence and inserted into a sentence array. 
 
 
 **2. Indexing**
 
-Before constructing the index, we first read through each of the tweets in Trec_microblog11.txt and stored the tweetID and message in a “tweet” class that we made.
 
-We used a hash map for the inverted index where it uses the tokens obtained from the preprocessing module as the key and an array of tuples which contain a tweetID and word frequency as the associated value. An example is shown below:
+From "topics_MB1-49.txt", we extracted each query and converted it into a vector. We then compared the query vector to each sentence vector to compute a cosine similarity score. 
+
+We then ranked all the documents from largest to smallest similarity score and identified the top-performing method. The results of this were placed in results.txt.  
+
+# **Algorithms, data structures and optimisations**
+
+**BERT**
+Bidirectional Encoder Representation from Transformers (BERT) is a technique for natural language processing pre-training developed by Google. BERT is trained on unlabelled text including Wikipedia and Book corpus. We used a pre-trained BERT model from Huggingface to embed our corpus. We loaded the BERT base model, which has 12 layers (transformer blocks), 12 attention heads, 110 million parameters and a hidden size of 768. We then used the  best-base-no-mean-tokens model to convert the sentences into vectors. 
+
+**Similarity**
+We used Cosine Distance to calculate the similarity between two documents. Cosine distance is the cosine of the angle between two vectors, which gives us the angular distance between the vectors. Formula to calculate cosine similarity between two vectors A and B is,
+<img width="387" alt="Picture 2" src="https://user-images.githubusercontent.com/68538906/144458328-054fdf42-c941-4b3a-9c3f-2bd7274fdcf5.png">
+
+
+
+To do this we used the cosine_similiarity function from the sklearn library. 
+
+
+**First 10 answers to query 3 from best system**
 ```
-world [DF: 2]-> (952194402811904, 1)(349521863287848, 2)
-question [DF:1]-> {349520414155816,3)
-```
-
-Initially our code was extremely inefficient and it took a tremendous amount of time to construct the inverted index. This was because we were looping through the preprocessed words and for each word we were looking through every tweet to see if that word appeared in the tweet ie.
-```python
-for preprocessed word in preprocessed word list {
-	for tweet in collection {
-		for word in tweet {
-			…
-		}
-	}
-}
-```
-
-
-After some analysis and careful consideration we decided to switch the order of the for loops by looking through the tweets and for each word in the tweet looking through the preprocessed words ie.
-```python
-for tweet in collection {
-	for word in tweet {
-		for preprocessed word in preprocessed word list {
-			…
-		}
-	}
-}
-```
-
-This simple change sped up the construction of the inverted exponentially.
-
-
-**3. Retrieving and ranking**
-
-
-
-Create “Query” class
-A query class was created which consisted of the query number and the query itself.
-
-Extract query and query number
-From "topics_MB1-49.txt", we extracted each query and its query number by creating a new instance of a query class. These extracted queries were then added to an array.
-
-Loop through array and evaluate each query
-We performed retrieval and ranking for each query based on the following steps after splitting each query to individual words. We made sure to transform each of these words to lowercase so that it matched exactly with our preprocessed words list.
-
-We also created a new class called RtrvlRank to extract information such as frequencies, weights, and showing the results.
-
-The steps taken for each query were:
-- We first split the query to be an array of strings.
-- Got the size of the collection, used variable N.
-- Created an object of the class RtrvlRank to extract information from the query.
-
-Now we are to calculate the maximum frequency for the query but to accomplish this we need the frequencies of each word in the query. This was done by calling function freq from RtrvlRank class to input our array of strings from the query, as shown below in the code snippet.
-
-```java
-public Map<String, Integer> freq(String[] queryWords){
-
-    Map<String, Integer> frequency = new HashMap<String,Integer>();
-    for(int i = 0;i<queryWords.length;i++){
-      if(!frequency.containsKey(queryWords[i])){
-        frequency.put(queryWords[i],new Integer(1));
-      }else{
-          frequency.replace(queryWords[i],Integer.valueOf(frequency.get(queryWords[i]).intValue()+1));
-      }
-    }
-    return frequency;
-  }
-```
-This will output a map with strings as keys and integers as values. Each string is a word in the query that maps to the number of times it is presented in the query. The reasoning of the algorithm is to not loop more than once to get the frequencies. We used this to get maximum frequency using our other function maxTF which gives us the mapping associated with the word with highest frequency. The highest frequency will be used to normalize the weights of the words in the query.
-
-We only need to retrieve the documents whose words intersect with words present in the query. We only get posting lists from the inverted index for each word in the query. From the posting list we can also get the document frequency in addition to the document ID and term-frequency pair. Before looping through the posting list we first calculate the term-frequency of the query with respect to the query.
-
-We call the weight function from the RtrvlRank class using the code snippet below.
-
-```java
-double termWeight = rankingOperations.weight(N,queryFrequencies.get(word),word_docFrequency,true,maxQueryFreq);
- ```
-
- The term weight is the weight of current term in query, N is the collection size, queryFrequencies.get(word) is retrieving the frequency found earlier with the freq function, word_docFrequency is the document frequency from the posting list, "true" is the boolean value to indicate that we are computing query weight and not document weight, and maxQueryFreq is used to devide the termFrequency by maximum frequency if and only if previous function argument is true.
-
- For more details, below in the code for the weight function.
-```java
-public double weight(int N,int termFrequency,int docf, boolean isQueryWord, int maxTermFreq){
-	double weightTF = 0.0;
-	double divisor = 1.0;
-	double N_db = (double) N;
-	double docf_db = (double) docf;
-	double tf_db = (double) termFrequency;
-	if(isQueryWord){
-		divisor = (double) maxTermFreq;
-	}
-	if (termFrequency != 0){
-		weightTF = (1 + Math.log10(tf_db))/divisor;
-	}
-	double weightDF = Math.log10(N_db/docf_db);
-	 return weightTF*weightDF;
-}
-```
-<details>
-  <summary>Code Details</summary>
-	First convert all integer values to double values so the calculations are correct.
-	Created a new variable 'divisor' with initial value of 1.0 to divide termFrequency.
-	Check if isQueryWord is true and if it is we set divisor to maxTermFreq.
-	Then check if termFrequency does not equal zero and if it is we set weight of termFrequency to 1 + log_10(termFrequency).
-	The weight is then divided by the divisor.
-	It is important to note that if termFrequency is equal to zero then we can not calculate weight. However, we only retrieve documents that contain at least on instance then we never run into this situation. This is also true for the document frequency.
-	The weight of the inverse document frequency is calculated by taking log base 10 of the collection size divided by document frequency (log_10(N/docFrequency)).
-	Then we return the product of the weights.
-</details>
-
-Now that we have the weight of the term we still require the length of the vector for the cosine method. To do this efficiently we add the termFrequency squared to current query length. After looping through all the words we will take square root of the product of query length (qi^2 + qj^2 + qk^2...) with the document length (di^2 + dj^2 + dk^2...). This is equivalent to getting vector length without excessive looping.
-
-
-The overall strategy to compute the scores and rank the documents is first to use HashMap with document IDs as keys and a pair of two variable (score and length) as values. The score would be the dot product of the weight of the document and termWeight. Length would be the square of the document weight. After looping through all the words and associated documents we divide the score with the square root of the product of the query length and document length. We do this instead of computing the length of the document with the square root and multiplying query length with square root.
-
-For the ranking we use a tree map with score as keys and a list of document IDs as values. The tree map sorts it's elements as they are inserted in log(n) time. It is mapped to a list of documents and not just the documents is because of the off-chance of two documents having the same score which would override the documents if not mapped to list of documents. Our code is provided below, first one shows how things are computed and second one shows inserting the documents into the tree map for ranking after everything has been computed.
-
-```java
-
-for(DocumentTfTuple doc:posting.getPostingList()){
-	//term frequency of the word in the document
-	int word_termFrequency = doc.getTermFrequency();
-	//get the ID
-  Long docID = doc.getTweetID();
-  //compute the weight of the word in terms of the document
-  double docWeight = rankingOperations.weight(N,word_termFrequency,word_docFrequency,false,1);
-  if(score_length.containsKey(docID)){
-		ScoreLength score_length_pair = score_length.get(docID);
-		double newScore = score_length_pair.getScore() + (docWeight*termWeight);
-		score_length.get(docID).setScore(newScore);
-		double newLength = score_length_pair.getLength() + Math.pow(docWeight,2);
-		score_length.get(docID).setLength(newLength);
-	}else{
-		double newScore =  docWeight*termWeight;
-		double newLength = Math.pow(docWeight,2);
-		score_length.put(docID,new ScoreLength(newScore,newLength));
-	}
-}
-
+3 Q0 29278582916251649	1 0.9030514 myRun
+3 Q0 34410414846517248	2 0.8982343 myRun
+3 Q0 35088534306033665	3 0.89789546 myRun
+3 Q0 33254598118473728	4 0.8800545 myRun
+3 Q0 34682906718908416	5 0.8780651 myRun
+3 Q0 29296574815272960	6 0.8724812 myRun
+3 Q0 32809006015713280	7 0.8602185 myRun
+3 Q0 32273316047757312	8 0.85713917 myRun
+3 Q0 34728356083666945	9 0.8556447 myRun
+3 Q0 32204788955357184	10 0.8442358 myRun
 ```
 
-```java
-
-for(Map.Entry<Long,ScoreLength> entry:score_length.entrySet()){
-
-            Long docIDRanking = entry.getKey();
-            ScoreLength value_node = entry.getValue();
-            double final_score = (value_node.getScore())/(Math.sqrt(queryLength*value_node.getLength()));
-
-            // System.out.println(final_score + ", ID: " + docIDRanking);
-            Double ranking_key = Double.valueOf(final_score);
-            if(!ranking.containsKey(ranking_key)){
-              List<Long> rank_array = new ArrayList<Long>();
-                rank_array.add(docIDRanking);
-                ranking.put(ranking_key,rank_array);
-            }else{
-                  ranking.get(ranking_key).add(docIDRanking);
-            }
-					}
+**First 10 answers to query 20 from best system**
 ```
+20 Q0 30245154598158337 1 0.9095361 myRun
+20 Q0 31747239311314944 2 0.9091542 myRun
+20 Q0 30986955508424704 3 0.87753177 myRun
+20 Q0 31777427092938752 4 0.86503893 myRun
+20 Q0 31492472911691776 5 0.8605448 myRun
+20 Q0 29958466130939904 6 0.8590292 myRun
+20 Q0 31948737517453312 7 0.8533156 myRun
+20 Q0 33247153149190144 8 0.852332 myRun
+20 Q0 30727342653444098 9 0.84897375 myRun
+20 Q0 31951627434860544 10 0.8485288 myRun
 
-
-**4. Run program to see results.txt**
-
-Please note that after you have run the program once, you will have to clear the results.txt file if you wish to run it again. If not cleared, there will be double the results. There is also a “PreRunResults.txt” file, which is what the results.txt is meant to look like.
-
-
-# Sample Results
-
-The vocabulary size is 59,413 words
-
-Sample of 100 tokens from vocabulary
-```
-
-priscilla
-manjat
-manjar
-tripping
-chilly
-tnfishermen
-salespeople
-dummy
-frustrations
-discharged
-chills
-flashing
-rimborsato
-floo
-flop
-flor
-flow
-chilli
-brandweer
-misspell
-weltweit
-resonance
-floe
-msfixx
-flog
-lovefb
-remis
-remit
-fuckwits
-ehabz
-segel
-lilastranomical
-makassar
-remix
-vaccination
-remia
-ldoren
-pellet
-ladyofarr
-dumps
-remin
-happyhunting
-sevirifell
-ramsincanon
-bothering
-visitando
-acopatunru
-dumpa
-technica
-humanitynews
-redundancy
-ipatter
-avail
-dumol
-hastings
-eugen
-barclaycard
-ugsoles
-srvs
-kristen
-indonesiana
-figaropravda
-ragelewis
-ofis
-mogli
-kentuckiana
-avait
-eurasia
-virusfreephone
-avaaz
-automation
-djjarrao
-yuhuuuuuuuuuuuuuuu
-leicester
-mogov
-sneaky
-pigeon
-unconference
-circumstances
-adriana
-timed
-nazar
-baltic
-sneaks
-conveniently
-chilis
-mystifying
-timee
-lieutenantloker
-ricardogardea
-juakhumalo
-segal
-footer
-spliced
-odessa
-observered
-kenyang
-timer
-honecker
-lanarak
-```
-
-**First 10 answers to query 1**
-```
-1 Q0 30260724248870912 1 1.0 myRun
-1 Q0 30198105513140224 2 0.9936888200553103 myRun
-1 Q0 30016851715031040 3 0.8857852417000207 myRun
-1 Q0 30016488928706560 4 0.8857852417000207 myRun
-1 Q0 30167063326629888 5 0.8857852417000207 myRun
-1 Q0 30275282464153600 6 0.8857852417000207 myRun
-1 Q0 30244402504929280 7 0.8463497262447456 myRun
-1 Q0 30236884051435520 8 0.8463497262447456 myRun
-1 Q0 30554037510213632 9 0.8463497262447456 myRun
-1 Q0 30500781002063872 10 0.8463497262447456 myRun
-```
-
-**First 10 answers to query 25**
-```
-25 Q0 31738694356434944 1 1.0 myRun
-25 Q0 32609015158542336 2 1.0 myRun
-25 Q0 31550836899323904 3 1.0 myRun
-25 Q0 31286354960715777 4 1.0 myRun
-25 Q0 30093525102108674 5 0.9008951031334103 myRun
-25 Q0 32685391781830656 6 0.9008951031334103 myRun
-25 Q0 32528974961713152 7 0.9008951031334103 myRun
-25 Q0 31320463862931456 8 0.9008951031334103 myRun
-25 Q0 32541161675558912 9 0.893156366056288 myRun
-25 Q0 29974357501550592 10 0.7988958504439189 myRun
 ```
 
 # Evaluation
 
-# BERT
+## Results
+
+**Experiment 3**
 
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ./trec_eval Trec_microblog11-qrels.txt results.txt
@@ -415,9 +162,13 @@ P_1000                  all     0.0419
 
 ```
 
-# Discussion of results
+## Discussion of results
 
-# Bert 
+**Experiment 3** 
+
 Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. 
+
+**Experiment 2**
+
 
  
