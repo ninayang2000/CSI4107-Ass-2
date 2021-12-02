@@ -114,7 +114,9 @@ To do this we used the cosine_similiarity function from the sklearn library.
 
 # Evaluation
 
-**BERT**
+# Discussion of results
+
+**Experiment 3**
 
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ./trec_eval Trec_microblog11-qrels.txt results.txt
@@ -162,6 +164,10 @@ P_1000                  all     0.0419
 # Discussion of results
 
 **Experiment 3** 
+
 Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. 
+
+**Experiment 2**
+
 
  
