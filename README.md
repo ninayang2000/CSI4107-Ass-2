@@ -11,7 +11,6 @@ Eve Alshehri - 300023661
 
 
 
-
 # **Work distribution**
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
 
