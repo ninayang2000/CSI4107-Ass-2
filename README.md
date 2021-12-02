@@ -45,10 +45,11 @@ Please follow the following steps to run our program:
 
 **Experiment 3**
 
-1. Install the sentence_transformer library through the command: pip install sentence-transformers
-2. Install the scikit-learn library through the command line: pip install -U scikit-learn
-3. Run the experiment1.py through the command line: python3 experiment1.py
-4. The results should now be in a file named “results.txt”. There is also a “expected_results.txt” file, which is what the results.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
+1. Clone repository submitted
+2. Install the sentence_transformer library through the command: pip install sentence-transformers
+3. Install the scikit-learn library through the command line: pip install -U scikit-learn
+4. Run the experiment3.py through the command line: python3 experiment3.py
+5. The results should now be in a file named “Results3.txt”. There is also a “Expected_results3.txt” file, which is what the Results3.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
 # **Steps**
 
