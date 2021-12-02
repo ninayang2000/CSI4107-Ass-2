@@ -13,13 +13,15 @@ Eve Alshehri - 300023661
 
 
 # **Work distribution**
-We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github.
-1. Nina was in charge of step 1 - preprocessing.
-2. Anna was in charge of step 2 - Indexing
-3. Eve was in charge of step 3 - Retrieval and Ranking.
+We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
 
-Since each subsequent step required input from the previous step, each of us tried to work fast and we explained our code and answered each other's questions.
-After the basic retrieval system was completed, all members brainstormed ways we could optimize and improve the system. Finally, Anna and Nina worked on the evaluation and results file as well as summarising our findings in the report.
+Converting results of assignment 1 into python so that we could run experiments - Nina
+Experiment 1 - Anna
+Experiment 2 - Eve
+Report - Nina
+
+Assignment 1 was done in Java, however, BERT was most easily executed in Python.  As such, there was quite a lot of reformatting that had to be done to the results of our original assignment for us to proceed. Nina was in charge of this. Following on, Anna and Eve conducted an experiment each. Finally, Nina put together the final report and summarised all findings. 
+
 
 
 # **Functionality of program**
@@ -366,7 +368,6 @@ After we placed the results.txt file in the same folder as the TREC_EVAL code we
 
 This gave us the following results:
 ```
-
 num_q                   all     49
 num_ret                 all     36347
 num_rel                 all     2640
@@ -392,6 +393,7 @@ P_10                    all     0.3163
 P_15                    all     0.3048
 P_20                    all     0.2898
 P_30                    all     0.2653
+
 P_100                   all     0.1814
 P_200                   all     0.1268
 P_500                   all     0.0732
