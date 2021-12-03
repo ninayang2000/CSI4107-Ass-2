@@ -135,8 +135,6 @@ To do this we used the cosine_similiarity function from the sklearn library.
 
 ## Results
 
-**Experiment 3**
-
 After we placed the results.txt file in the same folder as the TREC_EVAL code we ran the following command:
 ./trec_eval Trec_microblog11-qrels.txt results.txt
 
@@ -190,11 +188,11 @@ P_1000                  all     0.0419
 
 ### Experiment 3(BERT) vs assignment 1 
 
-Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. Since we have included all of the documents in the encoding for the comparison with the query, this could lead to diminishing the context of dependency of BERT which we suspect 
+Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. 
 
 ### Experiment 2(word2vec) vs assignment 1
 
-It is known Word2Vec isn't able to capture word relationships in the latant embedding space with limited information. It is possible that the lower performance could be due to the relatively small size of the corpus with respect to what is needed for the model to establish the syntatic and semantic relationships that would lead to a higher score.
+It is known Word2Vec isn't able to capture word relationships in the latant embedding space with limited information. It is possible that the lower performance could be due to the relatively small size of the corpus with respect to what is needed for the model to establish the syntatic and semantic relationships that would lead to a higher score. We also utilised a pre-trained Google model which may have also contributed to the inaccurate results. In the future we could try improve the reuslts by using a twitter specific model which may have improved results. 
 
 
 ### Comparison of experiment 2 (word2vec) and 3 (BERT)
