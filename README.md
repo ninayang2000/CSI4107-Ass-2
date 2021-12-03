@@ -61,7 +61,8 @@ Please follow the following steps to run our program:
 3. Install the numpy library through the command: pip install numpy
 4. Download the model through this link: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g and save the file into the folder where all the other documents are 
 5. Run the experiment2.py file through the command line: python3 experiment2.py
-6. The results should now be in a file named “Results2.txt”. There is also a “Expected_results2.txt” file, which is what the Results2.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
+_6. Please note that the docsim.py file was copied from https://github.com/v1shwa/document-similarity which falls under the permissions of the MIT License which allows us to obtain a opty of this osftware wsithout restriction_
+7. The results should now be in a file named “Results2.txt”. There is also a “Expected_results2.txt” file, which is what the Results2.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
 
 
@@ -187,15 +188,16 @@ P_1000                  all     0.0419
 
 ## Discussion of results
 
-**Experiment 3(BERT) vs assignment 1 ** 
+### Experiment 3(BERT) vs assignment 1 
 
 Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. Since we have included all of the documents in the encoding for the comparison with the query, this could lead to diminishing the context of dependency of BERT which we suspect 
 
-**Experiment 2(word2vec) vs assignment 1**
+### Experiment 2(word2vec) vs assignment 1
+
+It is known Word2Vec isn't able to capture word relationships in the latant embedding space with limited information. It is possible that the lower performance could be due to the relatively small size of the corpus with respect to what is needed for the model to establish the syntatic and semantic relationships that would lead to a higher score.
 
 
-
-**Comparison of experiment 2 (word2vec) and 3 (BERT)**
+### Comparison of experiment 2 (word2vec) and 3 (BERT)
 
 Word2Vec models generate embeddings that are context-independent: ie - there is just one vector (numeric) representation for each word. Different senses of the word (if any) are combined into one single vector.
 However, the BERT model generates embeddings that allow us to have multiple (more than one) vector (numeric) representations for the same word, based on the context in which the word is used. Thus, BERT embeddings are context-dependent and therefore produced better results than word2vec. 
