@@ -61,7 +61,7 @@ Please follow the following steps to run our program:
 3. Install the numpy library through the command: pip install numpy
 4. Download the model through this link: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g and save the file into the folder where all the other documents are 
 5. Run the experiment2.py file through the command line: python3 experiment2.py
-6. Please note that the docsim.py file was copied from https://github.com/v1shwa/document-similarity which falls under the permissions of the MIT License which allows us to obtain a copy of this software without restriction
+6. Please note that the docsim.py file was copied from https://github.com/v1shwa/document-similarity which falls under the permissions of the [MIT License](https://github.com/v1shwa/document-similarity/blob/master/LICENSE) which allows us to obtain a copy of this software without restriction
 7. The results should now be in a file named “Results2.txt”. There is also a “Expected_results2.txt” file, which is what the Results2.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
 
