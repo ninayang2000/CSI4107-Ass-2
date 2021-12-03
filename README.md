@@ -11,12 +11,14 @@ Eve Alshehri - 300023661
 
 # Intro 
 
-Out of the three experiments - we decided to perform experiment 1 and 3
+Out of the three experiments - we decided to perform a modified version of experiment 2 and 3
 1. Use your system for Assignment 1 to produce initial results (1000 documents for each query), then re-rank them based on a new similarity scores between the query and each selected document. You can produce vectors for the query and each of the selected documents using various versions of sent2vec, doc2vec, BERT, or the universal sentence encoder. You can also use pre-trained word embeddings and assemble them to produce query/document embeddings.
 
 2. Query vector modification or query expansion based on pretrained word embeddings or other methods. For example, add synonyms to the query if there is similarity with more than one word in the query (or with the whole query vector). You can use pre-trained word embeddings (such as FastText, word2vec, GloVe, and others), preferably some build on a Twitter corpus, to be closer to your collection of documents.
 
 3. Use BERT or other neural models from the beginning, without the need on an initial classical IR system, to compute the similarity between the query and every document in the collection. This probably will take too long time, but look for ways to reduce the number of operations needed, especially if your system for Assignment 1 is not functional. For example, you can use a simple boolean index to restrict the calculations only to documents that have at least one query word.
+
+for experiment 2 we utilised word2vec to produce vectors for each words whereas in experiment 3 we utilised bert to produce vectors for each document. After that we utilised cosine similarity to compare and rank the documents for each query. 
 
 # **Work distribution**
 We took a divide and conquer approach to complete this assignment. To manage all our code we utilised Github. We divided the assignment into four main steps and assigned members to be in charge of completing particular parts. 
@@ -51,6 +53,18 @@ Please follow the following steps to run our program:
 4. Run the experiment3.py through the command line: python3 experiment3.py
 5. The results should now be in a file named “Results3.txt”. There is also a “Expected_results3.txt” file, which is what the Results3.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
 
+
+**Experiment 2**
+
+1. Clone repository submitted
+2. Install the gensim library through the command: pip install gensim
+3. Install the numpy library through the command: pip install numpy
+4. Download the model through this link: https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g and save the file into the folder where all the other documents are 
+5. Run the experiment2.py file through the command line: python3 experiment2.py
+6. The results should now be in a file named “Results2.txt”. There is also a “Expected_results2.txt” file, which is what the Results2.txt is meant to look like. Please note that due to the large amount of tweets this program takes around 1 hour to fully process. 
+
+
+
 # **Steps**
 
 **1. Preprocessing**
@@ -74,6 +88,9 @@ We then ranked all the documents from largest to smallest similarity score and i
 
 **BERT**
 Bidirectional Encoder Representation from Transformers (BERT) is a technique for natural language processing pre-training developed by Google. BERT is trained on unlabelled text including Wikipedia and Book corpus. We used a pre-trained BERT model from Huggingface to embed our corpus. We loaded the BERT base model, which has 12 layers (transformer blocks), 12 attention heads, 110 million parameters and a hidden size of 768. We then used the  best-base-no-mean-tokens model to convert the sentences into vectors. 
+
+**word2vec**
+As the name suggests word2vec embeds words into vector space. Word2vec takes a text corpus as input and produce word embeddings as output. You are able to train our own embeddings if have enough data and computation available or we can use pre-trained embeddings. We will use a pre-trained embedding provided by Google.
 
 **Similarity**
 We used Cosine Distance to calculate the similarity between two documents. Cosine distance is the cosine of the angle between two vectors, which gives us the angular distance between the vectors. Formula to calculate cosine similarity between two vectors A and B is,
@@ -126,7 +143,13 @@ This gave us the following results:
 
 <img width="323" alt="Picture 1" src="https://user-images.githubusercontent.com/68538906/144455476-d010811b-1845-474a-a8fc-28421e397bc3.png">
 
-When comparing this with results from experiment one (below), it is evident that BERT performance is not as good. 
+below is the results for experiment 2:
+
+![image](https://user-images.githubusercontent.com/68418366/144532333-08c26369-edb5-48c5-9b56-915a53bd5daf.png)
+
+
+
+When comparing this with results from experiment one (below), it is evident that both experiments did not perform as well
 ```
 num_q                   all     49
 num_ret                 all     36347
@@ -164,11 +187,16 @@ P_1000                  all     0.0419
 
 ## Discussion of results
 
-**Experiment 3** 
+**Experiment 3(BERT) vs assignment 1 ** 
 
-Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. 
+Interestingly, employing the BERT method did not lead to better results for us. Both our MAP and P@10 scores were lower than what we achieved in assignment 1. A reason for assignment 1 performing so well may be that the queries and the tweets have large lexical similarity. Moreover, BERT took a lot longer to run when compared to assignment 1, suggesting that it is less efficient. Since we have included all of the documents in the encoding for the comparison with the query, this could lead to diminishing the context of dependency of BERT which we suspect 
 
-**Experiment 2**
+**Experiment 2(word2vec) vs assignment 1**
 
 
+
+**Comparison of experiment 2 (word2vec) and 3 (BERT)**
+
+Word2Vec models generate embeddings that are context-independent: ie - there is just one vector (numeric) representation for each word. Different senses of the word (if any) are combined into one single vector.
+However, the BERT model generates embeddings that allow us to have multiple (more than one) vector (numeric) representations for the same word, based on the context in which the word is used. Thus, BERT embeddings are context-dependent and therefore produced better results than word2vec. 
  
