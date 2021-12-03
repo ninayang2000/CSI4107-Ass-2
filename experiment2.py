@@ -1,37 +1,29 @@
+from gensim.models.keyedvectors import KeyedVectors
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy import spatial
 import re
 import string 
-from sentence_transformers import SentenceTransformer
-import timeit
-from gensim.models.keyedvectors import KeyedVectors
-model_path = './data/GoogleNews-vectors-negative300.bin'
+
+model_path = 'GoogleNews-vectors-negative300.bin'
 w2v_model = KeyedVectors.load_word2vec_format(model_path, binary=True)
-from DocSim import DocSim
+
+# Docsim is a library 
+from docsim import DocSim
 ds = DocSim(w2v_model)
 
 stopwords = []
 with open("stopWords.txt") as sw:
+
     for line in sw:
         stopwords.append(line.strip())
 
-
-def common_word(str1, str2):
-    if len(str1) >  len(str2):
-         words1 = str2
-         words2 = str1
-    else:
-        words1 = str1
-        words2 = str2
-    
-    for word in words1.split():
-        if word in words2:
-            return True
-    return False
 
 sen = []
 tweetIds = []
 
 with  open("Trec_microblog11.txt","r", encoding="utf-8-sig") as f:
-# with open("test.txt") as f:
+
     for line in f:
         tweetID = line[:18]
         tweet = line[18:]
@@ -45,23 +37,10 @@ with  open("Trec_microblog11.txt","r", encoding="utf-8-sig") as f:
         tweetIds.append(tweetID)
 
 
-print(sen[0:10])
-print(tweetIds[0:10])
-index_sen = []
-index_twtid = []
-# query = "bbc"
 
-
-
-model = SentenceTransformer('bert-base-nli-mean-tokens')
-#Encoding:
-# print("embedding")
-start = timeit.timeit()
-print("hello")
-# sen_embeddings = model.encode(index_sen)
 
 with open("topics_MB1-49.txt","r", encoding="utf-8-sig") as f:
-    with open('Results2.txt', 'w') as res:
+    with open('results2.txt', 'w') as res:
         queryID = 1 
         for row in f:
             if (row.startswith("<title>")):
@@ -69,37 +48,20 @@ with open("topics_MB1-49.txt","r", encoding="utf-8-sig") as f:
                 end = row.find("</title>")
                 query = row[start:end]    
                 print(query)
-
-                for doc, id in zip(sen,tweetIds):
-                    if (common_word(query,doc)):
-                        index_sen.append(doc)
-                        index_twtid.append(id)
-
-                sen_embeddings = model.encode(index_sen)    
-                query_embed = model.encode(query)
-                sim_scores = ds.calculate_similarity(query_embed, query_embed, threshold=0.7)
-                for i in sim_scores:
-                    result = i[]
-                    print(result)
-                    list3 = sorted(result, reverse= True, key = lambda x: x[1])
-                    print(list3)
-                    rank = 1
-                    for x in list3:
-                        res.writelines(str(queryID) + " Q0 "+tweetIds[x[0]] + str(rank) +" "+ str(x[1])+" myRun" + "\n")
-                        # print (queryID, i, tweetIds[x[0]], x[1])
-
-                        # print(x[1])
-                        rank = rank +1
-                res.write("\n")
-                queryID = queryID + 1 
-
-end = timeit.timeit()
-print(end - start)
+                sim_scores = ds.calculate_similarity(query, target_docs=sen,doc_ids=tweetIds)
+                print(sim_scores)
+                rank =1
+                for x in sim_scores:
+                    res.writelines(str(queryID) + " Q0 "+x["id"] + str(rank) +" "+ str(x["score"])+" myRun" + "\n")
+                    rank = rank +1
+                queryID += 1
 
 
+# source_doc = 'how to delete an invoice'
+# target_docs = ['delete a invoice', 'how do i remove an invoice', "purge an invoice"]
 
+# sim_scores = ds.calculate_similarity(source_doc, target_docs)
 
-
-
-
-
+# print(sim_scores)
+# for s in sen:
+#     sim_scores = ds.calculate_similarity(s, sen)

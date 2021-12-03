@@ -35,10 +35,12 @@ class DocSim:
             return 0
         return csim
 
-    def calculate_similarity(self, source_doc, target_docs=None, threshold=0):
+    def calculate_similarity(self, source_doc, target_docs=None, doc_ids= None, threshold=0):
         """Calculates & returns similarity scores between given source document & all
         the target documents."""
         if not target_docs:
+            return []
+        if not doc_ids:
             return []
 
         if isinstance(target_docs, str):
@@ -46,11 +48,12 @@ class DocSim:
 
         source_vec = self.vectorize(source_doc)
         results = []
-        for doc in target_docs:
+        for doc,id in zip(target_docs,doc_ids):
             target_vec = self.vectorize(doc)
             sim_score = self._cosine_sim(source_vec, target_vec)
+            #modified code to include tweet ids
             if sim_score > threshold:
-                results.append({"score": sim_score, "doc": doc})
+                results.append({"score": sim_score, "doc": doc, "id":id})
             # Sort results by score in desc order
             results.sort(key=lambda k: k["score"], reverse=True)
 
